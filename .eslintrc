@@ -17,7 +17,7 @@
     "plugins": [
         "@typescript-eslint"
     ],
-    "ignorePatterns": [ "jest.config.*" ],
+    "ignorePatterns": [ "jest.config.*", "build/" ],
     "rules": {
         "indent": [ "error", 2 ],
         "linebreak-style": [ "error", "unix" ],

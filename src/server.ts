@@ -30,9 +30,10 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
  *                               Register all routes
  ***********************************************************************************/
 
+const BASE_PATH = process.env.BASE_PATH || '/api';
 getFilesWithKeyword('.router', __dirname + '/app').forEach(async (file: string) => {
   const { router } = await import(file);
-  app.use('/', router);
+  app.use(`${BASE_PATH}/`, router);
 });
 
 /************************************************************************************
