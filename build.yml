@@ -1,0 +1,12 @@
+options:
+  concurrency: 0 # Use all CPUs
+
+packages:
+  api:
+    cwd: build
+    output: ../dist/entando-webui-core-api.zip
+    trace:
+      - src/index.js
+    include:
+      - ../package.json
+      - src/app

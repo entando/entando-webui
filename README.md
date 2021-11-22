@@ -10,6 +10,8 @@ This project is an internal service used to manage NxPages
 > src/utils      -> Utils functions
 > tests          -> Unit and Integration Tests
 > coverage       -> Jest coverage report is generated here
+> build          -> Typescript build folder
+> dist           -> Minified packages folder
 > package.json   -> App Manifest
 ```
 
@@ -17,6 +19,14 @@ This project is an internal service used to manage NxPages
 Run app in development mode using default port `8080`
 ```
 yarn dev
+```
+
+## Build
+To build this package and run it in production we use [trace-pkg](https://github.com/FormidableLabs/trace-pkg) to optimize the generated files.
+
+```
+$ yarn build
+$ yarn start -p 8080
 ```
 
 ## Lint
