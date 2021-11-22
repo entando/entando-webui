@@ -4,7 +4,7 @@
   "description": "Entando WebUI Core API",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc && trace-pkg -c build.yml && unzip -qq dist/entando-webui-core-api.zip -d dist/entando-webui-core-api",
+    "build": "tsc && trace-pkg -c build.yml && unzip -o -qq dist/entando-webui-core-api.zip -d dist/entando-webui-core-api",
     "start": "node ./dist/entando-webui-core-api/src/index.js",
     "dev": "nodemon -w src -e ts,json -x ts-node ./src/index.ts",
     "test": "jest",

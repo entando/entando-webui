@@ -29,6 +29,8 @@ $ yarn build
 $ yarn start -p 8080
 ```
 
+> Note: Current package size is `470KB` zipped and `1.7MB` unzipped.
+
 ## Lint
 Lint and code style validation:
 
