@@ -2,8 +2,9 @@ import express, { Express } from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
-import config from '../config.json';
-import { getFilesWithKeyword } from './utils/getFilesWithKeyword';
+import { keycloak } from './middleware/keycloak';
+import { loadRouters } from './utils/loadRouters';
+import errorHandler, { NotFoundError } from './middleware/error';
 
 const app: Express = express();
 
@@ -16,37 +17,36 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Handle logs in console during development
-if (process.env.NODE_ENV === 'development' || config.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
   app.use(cors());
 }
 
 // Handle security and origin in production
-if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   app.use(helmet());
 }
+
+// Handle keycloak authorization
+app.use(keycloak.middleware());
 
 /************************************************************************************
  *                               Register all routes
  ***********************************************************************************/
+loadRouters(__dirname + '/app')
+  .forEach(router => {
+    app.use('/api', router);
+  });
 
-const BASE_PATH = process.env.BASE_PATH || '/api';
-getFilesWithKeyword('.router', __dirname + '/app').forEach(async (file: string) => {
-  const { router } = await import(file);
-  app.use(`${BASE_PATH}/`, router);
+// Fallback route
+app.use('*', () => {
+  throw new NotFoundError();
 });
 
 /************************************************************************************
  *                               Express Error Handling
  ***********************************************************************************/
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  return res.status(500).json({
-    errorName: err.name,
-    message: err.message,
-    stack: err.stack || 'no stack defined'
-  });
-});
+app.use(errorHandler);
 
 export default app;
