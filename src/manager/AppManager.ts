@@ -1,6 +1,8 @@
 import { NextJsAppManager } from './impl/nextjs/NextJsAppManager';
 
 export interface AppManager {
+  appDevPath(): string;
+  pagesDevPath(): string;
   savePageFile(code: string, data: string): void;
   createPage(code: string): void;
 }
