@@ -2,11 +2,15 @@
     "private": true,
     "name": "entando-webui",
     "workspaces": [
+        "packages/app-engine-client",
         "packages/app-management-service",
         "packages/quickstart-nextjs-starter/app"
     ],
     "scripts": {
-        "dev": "concurrently --kill-others-on-fail -n nextjs,api \"yarn workspace @entando-webui/quickstart-nextjs-starter dev\"  \"yarn workspace @entando-webui/app-management-service dev\""
+        "app-engine-client": "yarn workspace @entando-webui/app-engine-client dev",
+        "quickstart-nextjs-starter": "yarn workspace @entando-webui/quickstart-nextjs-starter dev",
+        "app-management-service": "yarn workspace @entando-webui/app-management-service dev",
+        "dev": "concurrently -k -n quickstart-nextjs-starter,app-management-service,app-engine-client \"yarn quickstart-nextjs-starter\"  \"yarn app-management-service\" \"yarn app-engine-client\""
     },
     "devDependencies": {
         "concurrently": "^6.4.0"

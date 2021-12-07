@@ -4,8 +4,7 @@ import React from 'react';
 import Head from 'next/head';
 import path from 'path';
 
-import { Entando6PortalUIUrlDataSource } from 'datasources/entando6-portalui';
-import { Entando6CorePageDataSource } from '../datasources/entando6-core';
+import { Entando6PortalUIUrlDataSource, Entando6CorePageDataSource } from '@entando-webui/app-engine-client';
 
 
 /**

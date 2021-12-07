@@ -1,17 +1,14 @@
 import { SessionProvider } from 'next-auth/react';
 import type { AppInitialProps, AppProps } from 'next/app';
 import React from 'react';
-import { TokenCache } from 'datasources/entando6-keycloak/getServerKeycloakToken';
+import { TokenCache } from '@entando-webui/app-engine-client';
 
 declare global {
-  namespace NodeJS {
-    interface Global {
-      entandoCoreKycloakTokenCache: TokenCache;
-    }
-  }
+  // eslint-disable-next-line no-var
+  var __KEYCLOAK_TOKEN_CACHE__: TokenCache;
 }
 
-global.entandoCoreKycloakTokenCache = new TokenCache();
+global.__KEYCLOAK_TOKEN_CACHE__ = new TokenCache();
 
 function WebUiApp({ Component, pageProps }: AppProps & AppInitialProps) {
   return (

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import useSWR from 'swr';
 
-import { Entando6CMSContentDataSource, Entando6CMSContentsDataSource } from './entando6-cms';
+import { Entando6CMSContentDataSource, Entando6CMSContentsDataSource } from '@entando-webui/app-engine-client';
 
 export async function ProductsDataSource() {
   console.log('Fetching Products...');

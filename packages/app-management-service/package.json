@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "description": "Entando WebUI App Management API",
   "main": "src/index.ts",
+  "private": true,
   "scripts": {
     "build": "tsc && trace-pkg -c build.yml && unzip -o -qq dist/entando-webui-core-api.zip -d dist/entando-webui-core-api",
     "start": "NODE_ENV=production node ./dist/entando-webui-core-api/src/index.js",
-    "dev": "NODE_ENV=development nodemon -w src -e ts,json -x ts-node ./src/index.ts",
+    "dev": "NODE_ENV=development nodemon -w src -e js,ts,json -x ts-node ./src/index.ts",
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -36,6 +37,7 @@
     "uuid": "^8.3.2"
   },
   "dependencies": {
+    "@entando-webui/app-engine-client": "*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cors": "^2.8.5",

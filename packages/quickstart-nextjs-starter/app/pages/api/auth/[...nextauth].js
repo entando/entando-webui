@@ -1,8 +1,7 @@
 import NextAuth from 'next-auth';
 import KeycloakProvider from 'next-auth/providers/keycloak';
 
-import { Entando6UserAuthoritiesDataSource } from 'datasources/entando6-core';
-import { refreshClientToken } from 'datasources/entando6-keycloak/refreshClientKeycloakToken';
+import { Entando6UserAuthoritiesDataSource, refreshClientToken } from '@entando-webui/app-engine-client';
 
 export default NextAuth({
   providers: [

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { getServerKeycloakToken } from 'datasources/entando6-keycloak/getServerKeycloakToken';
+import { getServerKeycloakToken } from '../keycloak/getServerKeycloakToken';
 
-export async function Entando6CorePagesDataSource() {
+export const Entando6CorePagesDataSource = async () => {
   console.log('Fetching Entando6CorePages...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/pages?status=published`, {
@@ -9,9 +9,9 @@ export async function Entando6CorePagesDataSource() {
   });
 
   return res.data.payload;
-}
+};
 
-export async function Entando6CorePageDataSource(pageCode) {
+export const Entando6CorePageDataSource = async (pageCode: string) => {
   console.log(`Fetching Entando6CorePage: ${pageCode}`);
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/pages/${pageCode}?status=published`, {
@@ -19,9 +19,9 @@ export async function Entando6CorePageDataSource(pageCode) {
   });
 
   return res.data.payload;
-}
+};
 
-export async function Entando6CorePageTemplateDataSource(pageTemplateCode) {
+export const Entando6CorePageTemplateDataSource = async (pageTemplateCode: string) => {
   console.log('Fetching Entando6CorePageTemplate...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/pageModels/${pageTemplateCode}`, {
@@ -29,9 +29,9 @@ export async function Entando6CorePageTemplateDataSource(pageTemplateCode) {
   });
 
   return res.data.payload;
-}
+};
 
-export async function Entando6CoreFragmentSource(fragmentCode) {
+export const Entando6CoreFragmentSource = async (fragmentCode: string) => {
   console.log('Fetching Entando6CoreFragment...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/fragments/${fragmentCode}`, {
@@ -39,9 +39,9 @@ export async function Entando6CoreFragmentSource(fragmentCode) {
   });
 
   return res.data.payload;
-}
+};
 
-export async function Entando6CorePageConfigurationSource(pageCode) {
+export const Entando6CorePageConfigurationSource = async (pageCode: string) => {
   console.log('Fetching Entando6CorePageConfiguration...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/page/${pageCode}/widgets?status=published`, {
@@ -49,9 +49,9 @@ export async function Entando6CorePageConfigurationSource(pageCode) {
   });
 
   return res.data.payload;
-}
+};
 
-export async function Entando6CorePageSettingsDataSource() {
+export const Entando6CorePageSettingsDataSource = async () => {
   console.log('Fetching Entando6CorePageSettings...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/pageSettings`, {
@@ -59,9 +59,9 @@ export async function Entando6CorePageSettingsDataSource() {
   });
 
   return res.data.payload;
-}
+};
 
-export async function Entando6UserAuthoritiesDataSource(username) {
+export const Entando6UserAuthoritiesDataSource = async (username: string) => {
   console.log('Fetching Entando6CoreUserAuthorities...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/users/${username}/authorities`, {
@@ -69,9 +69,9 @@ export async function Entando6UserAuthoritiesDataSource(username) {
   });
 
   return res.data.payload;
-}
+};
 
-export async function Entando6CoreLanguagesDataSource() {
+export const Entando6CoreLanguagesDataSource = async () => {
   console.log('Fetching Entando6CoreLanguages...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/languages`, {
@@ -79,4 +79,4 @@ export async function Entando6CoreLanguagesDataSource() {
   });
 
   return res.data.payload;
-}
+};
