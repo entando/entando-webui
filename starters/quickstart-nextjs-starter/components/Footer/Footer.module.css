@@ -1,0 +1,9 @@
+.wrapper {
+  text-align: center;
+  padding: 20px;
+  border-top: solid 1px #eee;
+}
+
+.wrapper * {
+  vertical-align: middle;
+}

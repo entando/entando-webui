@@ -1,0 +1,44 @@
+.wrapper {
+  width: 250px;
+  height: 380px;
+  padding: 20px;
+  border: solid 1px #eee;
+  border-radius: 5px;
+  margin: 1rem;
+  /* flex-basis: 45%; */
+  position: relative;
+}
+
+.category {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgb(44, 98, 214);
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+  font-size: 12px;
+}
+
+.imgWrapper {
+  text-align: center;
+  height: 160px;
+}
+
+.title {
+}
+
+.price {
+  font-size: 24px;
+  padding-top: 20px;
+}
+
+.button {
+  position: absolute;
+  bottom: 20px;
+}
+
+.button,
+.button button {
+  width: calc(100% - 20px);
+}

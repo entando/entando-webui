@@ -1,0 +1,53 @@
+{
+  "name": "@entando-webui/quickstart-nextjs-starter",
+  "version": "1.0.0",
+  "private": true,
+  "license": "GPL-3.0",
+  "scripts": {
+    "dev": "next dev -p 5000",
+    "build": "next build",
+    "start": "next start -p 5000",
+    "test": "jest",
+    "telemetry:disable": "next telemetry disable",
+    "telemetry:status": "next telemetry status",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc"
+  },
+  "dependencies": {
+    "@entando-webui/app-engine-client": "^1.0.0",
+    "axios": "^0.21.1",
+    "global": "^4.4.0",
+    "jwt-decode": "^3.1.2",
+    "next": "^12.0.4",
+    "next-auth": "4.0.0-beta.6",
+    "object-mapper": "^6.2.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-awesome-slider": "^4.1.0",
+    "react-dom": "^17.0.1",
+    "single-spa": "^5.9.2",
+    "single-spa-react": "^4.1.1",
+    "swr": "^0.4.0"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^12.0.3",
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^12.1.2",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^14.14.35",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.2.0",
+    "eslint": "<8.0.0",
+    "eslint-config-next": "^12.0.3",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-react": "^7.26.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.3.1",
+    "prettier": "^2.2.1",
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.2.3"
+  }
+}
