@@ -4,10 +4,10 @@ options:
 packages:
   api:
     cwd: build
-    output: ../dist/entando-webui-core-api.zip
+    output: ../dist/app-management-service.zip
     trace:
       - src/index.js
-      - src/app
+      - src/api
     include:
       - ../package.json
       - ../**/*.hbs

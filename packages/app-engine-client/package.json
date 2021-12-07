@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "repository": "https://github.com/entando/entando-webui/packages/app-engine-client",
   "author": "Filipe Leandro <f.leandro@entando.com>",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "private": false,
   "files": [ "src/*.ts" ],
   "scripts": {

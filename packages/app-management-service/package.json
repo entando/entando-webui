@@ -4,9 +4,10 @@
   "description": "Entando WebUI App Management API",
   "main": "src/index.ts",
   "private": true,
+  "license": "GPL-3.0",
   "scripts": {
-    "build": "tsc && trace-pkg -c build.yml && unzip -o -qq dist/entando-webui-core-api.zip -d dist/entando-webui-core-api",
-    "start": "NODE_ENV=production node ./dist/entando-webui-core-api/src/index.js",
+    "build": "tsc && trace-pkg -c build.yml && unzip -o -qq dist/quickstart-nextjs-starter.zip -d dist/quickstart-nextjs-starter",
+    "start": "NODE_ENV=production node ./dist/quickstart-nextjs-starter/src/index.js",
     "dev": "NODE_ENV=development nodemon -w src -e js,ts,json -x ts-node ./src/index.ts",
     "test": "jest",
     "lint": "eslint .",
@@ -37,7 +38,7 @@
     "uuid": "^8.3.2"
   },
   "dependencies": {
-    "@entando-webui/app-engine-client": "*",
+    "@entando-webui/app-engine-client": "^1.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cors": "^2.8.5",

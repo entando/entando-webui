@@ -6,6 +6,7 @@
         "packages/app-management-service",
         "starters/quickstart-nextjs-starter"
     ],
+    "license": "GPL-3.0",
     "scripts": {
         "app-engine-client": "yarn workspace @entando-webui/app-engine-client dev",
         "app-management-service": "yarn workspace @entando-webui/app-management-service dev",
