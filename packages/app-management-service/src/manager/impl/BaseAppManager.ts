@@ -3,7 +3,7 @@ import fs from 'fs';
 export abstract class BaseAppManager {
 
   appDevPath(): string {
-    return `${process.env.MANAGED_APP_PATH_DEV}`;
+    return `${process.env.MANAGED_APP_PATH}`;
   }
 
   pagesDevPath(): string {

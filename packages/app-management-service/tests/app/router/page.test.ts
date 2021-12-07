@@ -41,7 +41,7 @@ describe('User can Create and Delete a Page', () => {
   });
 
   beforeEach(() => {
-    process.env.MANAGED_APP_PATH_DEV = `/tmp/entando-webui-core-api/${uuid()}`;
+    process.env.MANAGED_APP_PATH = `/tmp/quickstart-nextjs-starter/${uuid()}`;
   });
 
   test('tests create a page successfully', async () => {
