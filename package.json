@@ -4,12 +4,12 @@
     "workspaces": [
         "packages/app-engine-client",
         "packages/app-management-service",
-        "packages/quickstart-nextjs-starter"
+        "starters/quickstart-nextjs-starter"
     ],
     "scripts": {
         "app-engine-client": "yarn workspace @entando-webui/app-engine-client dev",
-        "quickstart-nextjs-starter": "yarn workspace @entando-webui/quickstart-nextjs-starter dev",
         "app-management-service": "yarn workspace @entando-webui/app-management-service dev",
+        "quickstart-nextjs-starter": "yarn workspace @entando-webui/quickstart-nextjs-starter dev",
         "dev": "concurrently -k -n quickstart-nextjs-starter,app-management-service,app-engine-client \"yarn quickstart-nextjs-starter\"  \"yarn app-management-service\" \"yarn app-engine-client\""
     },
     "devDependencies": {
