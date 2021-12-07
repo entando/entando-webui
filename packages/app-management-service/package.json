@@ -1,7 +1,7 @@
 {
-  "name": "entando-webui-core-api",
+  "name": "@entando-webui/app-management-service",
   "version": "0.0.1",
-  "description": "Entando WebUI Core API",
+  "description": "Entando WebUI App Management API",
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc && trace-pkg -c build.yml && unzip -o -qq dist/entando-webui-core-api.zip -d dist/entando-webui-core-api",

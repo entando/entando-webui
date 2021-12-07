@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "name": "entando-webui",
+    "workspaces": [
+        "packages/app-management-service",
+        "packages/quickstart-nextjs-starter/app"
+    ],
+    "scripts": {
+        "dev": "concurrently --kill-others-on-fail -n nextjs,api \"yarn workspace @entando-webui/quickstart-nextjs-starter dev\"  \"yarn workspace @entando-webui/app-management-service dev\""
+    },
+    "devDependencies": {
+        "concurrently": "^6.4.0"
+    }
+}

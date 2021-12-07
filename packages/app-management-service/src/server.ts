@@ -33,7 +33,7 @@ app.use(keycloak.middleware());
 /************************************************************************************
  *                               Register all routes
  ***********************************************************************************/
-loadRouters(__dirname + '/app')
+loadRouters(__dirname + '/api')
   .forEach(router => {
     app.use('/api', router);
   });
