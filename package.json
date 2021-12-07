@@ -4,7 +4,7 @@
     "workspaces": [
         "packages/app-engine-client",
         "packages/app-management-service",
-        "packages/quickstart-nextjs-starter/app"
+        "packages/quickstart-nextjs-starter"
     ],
     "scripts": {
         "app-engine-client": "yarn workspace @entando-webui/app-engine-client dev",
