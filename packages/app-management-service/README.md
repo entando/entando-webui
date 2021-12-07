@@ -1,12 +1,14 @@
-# Entando WebUI Core API
-This project is an internal service used to manage NxPages
+# App Management Service
+This is a Microservice used to manage NxApps (Next Generation Apps).
+
+At this moment we only support Next.js Apps but the idea is to support other kind of Frameworks in the Future.
 
 # Development
 
 ## Project Structure
 ```
 > src            -> Source Folder
-> src/app        -> API Controllers
+> src/api        -> API Controllers
 > src/utils      -> Utils functions
 > tests          -> Unit and Integration Tests
 > coverage       -> Jest coverage report is generated here
