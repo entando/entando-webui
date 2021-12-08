@@ -4,7 +4,8 @@ import React from 'react';
 import Head from 'next/head';
 import path from 'path';
 
-import { Entando6PortalUIUrlDataSource, Entando6CorePageDataSource } from '@entando-webui/app-engine-client';
+import { getPage } from '@entando-webui/app-engine-client/src/core/pages/getPage';
+import { Entando6PortalUIUrlDataSource } from '@entando-webui/app-engine-client';
 
 
 /**
@@ -26,7 +27,7 @@ export default class EntandoPage extends React.Component {
 export async function getServerSideProps({ req, res }) {
   const { serverRuntimeConfig } = getConfig();
   const pageCode = path.parse(req.url).base.replace('.page', '');
-  const pageData = await Entando6CorePageDataSource(pageCode);
+  const pageData = await getPage(pageCode);
   const isPrivatePage = pageData && pageData.ownerGroup !== 'free';
   const session = await getSession({ req });
 

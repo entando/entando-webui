@@ -4,7 +4,7 @@ import { Layout } from 'components/Layout';
 import { useEntandoPermissions } from 'hooks/useEntandoPermissions';
 import { useSession } from 'next-auth/react';
 import { Entando6CoreLanguagesDataSource } from '@entando-webui/app-engine-client';
-import { getPage } from '@entando-webui/app-engine-client/src/core/pages';
+import { getPage } from '@entando-webui/app-engine-client/src/core/pages/getPage';
 
 /**
  * Example Route Override.
