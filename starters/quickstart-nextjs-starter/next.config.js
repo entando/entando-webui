@@ -4,6 +4,9 @@ module.exports = {
   future: {
     webpack5: true,
   },
+  experimental: {
+    externalDir: true,
+  },
   serverRuntimeConfig: {
     PORTALUI_ADDR: process.env.PORTALUI_ADDR || 'http://localhost:8088',
   },

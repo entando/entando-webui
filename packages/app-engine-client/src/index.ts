@@ -1,6 +1,4 @@
 export {
-  Entando6CorePagesDataSource,
-  Entando6CorePageDataSource,
   Entando6CorePageTemplateDataSource,
   Entando6CoreFragmentSource,
   Entando6CorePageConfigurationSource,

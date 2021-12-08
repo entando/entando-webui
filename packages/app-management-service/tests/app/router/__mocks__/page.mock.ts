@@ -1,15 +1,44 @@
 export const CREATE_PAGE_REQUEST = {
+  code: 'new_page',
+  titles: {
+    'en': 'New Page',
+    'it': 'Nuova Pagina'
+  },
+  parentCode: 'homepage',
+  ownerGroup: 'administrators',
+  pageModel: 'home',
   seo: false,
   displayedInMenu: true,
   charset: 'utf-8',
   contentType: 'text/html',
+};
+
+export const CREATE_PAGE_RESPONSE = {
   code: 'new_page',
-  titles: {
-    'en': 'new page'
-  },
+  status: 'unpublished',
+  onlineInstance: false,
+  displayedInMenu: true,
+  pageModel: 'home',
+  charset: 'utf-8',
+  contentType: 'text/html',
   parentCode: 'homepage',
+  seo: false,
+  titles: {
+    en: 'New Page',
+    it: 'Nuova Pagina'
+  },
+  fullTitles: {
+    en: 'Home / New Page',
+    it: 'Home / Nuova Pagina'
+  },
   ownerGroup: 'administrators',
-  pageModel: 'home'
+  joinGroups: [],
+  children: [],
+  position: 8,
+  numWidget: 0,
+  lastModified: '2021-12-08 14:12:35',
+  fullPath: 'homepage/new_page',
+  token: null
 };
 
 export const CREATE_VALIDATION_ERRORS = [

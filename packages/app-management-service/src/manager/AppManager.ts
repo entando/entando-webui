@@ -5,6 +5,7 @@ export interface AppManager {
   pagesDevPath(): string;
   savePageFile(code: string, data: string): void;
   createPage(code: string): void;
+  deletePage(code: string): void;
 }
 
 export class Factory {

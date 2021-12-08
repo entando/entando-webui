@@ -19,6 +19,13 @@ export abstract class BaseAppManager {
     }
     fs.writeFileSync(filepath, data);
   }
+
+  deletePage(code: string): void {
+    const filepath = `${this.pagesDevPath()}/${code}.page.tsx`;
+    if(fs.existsSync(filepath)) {
+      fs.unlinkSync(filepath);
+    }
+  }
   
   abstract createPage(code: string): void;
 }
