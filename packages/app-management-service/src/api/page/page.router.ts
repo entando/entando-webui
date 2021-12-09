@@ -4,8 +4,10 @@ import { validate } from '../../middleware/validator';
 import { appManager } from '../../manager/AppManager';
 import createPage from '@entando-webui/app-engine-client/src/core/pages/createPage';
 import deletePage from '@entando-webui/app-engine-client/src/core/pages/deletePage';
+import updatePageStatus from '@entando-webui/app-engine-client/src/core/pages/updatePageStatus';
 import CreatePageRequest from './request/CreatePageRequest';
 import { InternalServerError, RestError } from '../../middleware/error';
+import UpdatePageStatusRequest from './request/UpdatePageStatusRequest';
 
 export const router: Router = Router();
 
@@ -48,9 +50,29 @@ router.delete('/pages/:code',
   }
 );
 
+router.put('/pages/:code/status',
+  keycloak.protect(),
+  validate(UpdatePageStatusRequest),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let result;
+    try {
+      result = await updatePageStatus(req.params.code, req.body);
+    } catch (e) {
+      console.log('Error updating Entando Core Page Status');
+      return next(handleError(e));
+    }
+
+    appManager.updatePageStatus(req.params.code, req.body.status);
+
+    res.status(201).send({
+      payload: result,
+    });
+  }
+);
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleError = (e: any): RestError => {
   return e.isAxiosError
-    ? new RestError(e.response.status, e.response.statusText)
+    ? new RestError(e.response.status, e.response.statusText, e.response.data.errors)
     : new InternalServerError(e.message);
 };

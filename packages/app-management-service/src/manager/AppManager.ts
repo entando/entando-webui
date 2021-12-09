@@ -1,11 +1,12 @@
 import { NextJsAppManager } from './impl/nextjs/NextJsAppManager';
 
 export interface AppManager {
-  appDevPath(): string;
+  appPath(): string;
   pagesDevPath(): string;
   savePageFile(code: string, data: string): void;
   createPage(code: string): void;
   deletePage(code: string): void;
+  updatePageStatus(code: string, status: 'draft' | 'published'): void;
 }
 
 export class Factory {

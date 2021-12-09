@@ -2,12 +2,12 @@ import fs from 'fs';
 
 export abstract class BaseAppManager {
 
-  appDevPath(): string {
+  appPath(): string {
     return `${process.env.MANAGED_APP_PATH}`;
   }
 
   pagesDevPath(): string {
-    return `${this.appDevPath()}/pages/entando-de-app/[language]`;
+    return `${this.appPath()}/pages/entando-de-app/[language]`;
   }
 
   savePageFile(code: string, data: string): void {
@@ -25,6 +25,16 @@ export abstract class BaseAppManager {
     if(fs.existsSync(filepath)) {
       fs.unlinkSync(filepath);
     }
+  }
+
+  updatePageStatus(code: string, status: 'draft' | 'published'): void {
+    const draftFilepath = `${this.pagesDevPath()}/${code}.page.tsx`;
+    const publishedFilepath = `${this.pagesDevPath()}/${code}.published.page.tsx`;
+    if(fs.existsSync(draftFilepath) && status === 'published') {
+      fs.copyFileSync(draftFilepath, publishedFilepath);
+    } else if(fs.existsSync(publishedFilepath) && status === 'draft') {
+      fs.unlinkSync(publishedFilepath);
+    } //else fails silently...
   }
   
   abstract createPage(code: string): void;

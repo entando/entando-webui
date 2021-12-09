@@ -10,3 +10,7 @@ export interface ICreatePageRequest {
   charset: string
   contentType: string
 }
+
+export interface IUpdatePageStatusRequest {
+  status: string
+}
