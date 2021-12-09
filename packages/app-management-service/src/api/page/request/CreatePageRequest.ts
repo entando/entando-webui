@@ -1,6 +1,7 @@
+import { ICreatePageRequest } from '@entando-webui/app-engine-client/src/core/pages/request/ICreatePageRequest';
 import { IsString, IsBoolean, IsDefined } from 'class-validator';
  
-class CreatePageRequest {
+class CreatePageRequest implements ICreatePageRequest {
   @IsString()
   public code: string;
 

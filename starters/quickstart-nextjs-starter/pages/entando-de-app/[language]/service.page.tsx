@@ -3,7 +3,8 @@ import { Layout } from 'components/Layout';
 
 import { useEntandoPermissions } from 'hooks/useEntandoPermissions';
 import { useSession } from 'next-auth/react';
-import { Entando6CoreLanguagesDataSource, Entando6CorePageDataSource } from '@entando-webui/app-engine-client';
+import { Entando6CoreLanguagesDataSource } from '@entando-webui/app-engine-client';
+import { getPage } from '@entando-webui/app-engine-client/src/core/pages/getPage';
 
 /**
  * Example Route Override.
@@ -53,7 +54,7 @@ const ServicePage = ({ page }: Props) => {
 export async function getStaticProps({ params }) {
   const { language } = params;
   const pageCode = 'service';
-  const pageData = await Entando6CorePageDataSource(pageCode);
+  const pageData = await getPage(pageCode);
 
   return {
     props: {

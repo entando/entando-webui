@@ -1,26 +1,6 @@
 import axios from 'axios';
 import { getServerKeycloakToken } from '../keycloak/getServerKeycloakToken';
 
-export const Entando6CorePagesDataSource = async () => {
-  console.log('Fetching Entando6CorePages...');
-  const token = await getServerKeycloakToken();
-  const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/pages?status=published`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  return res.data.payload;
-};
-
-export const Entando6CorePageDataSource = async (pageCode: string) => {
-  console.log(`Fetching Entando6CorePage: ${pageCode}`);
-  const token = await getServerKeycloakToken();
-  const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/pages/${pageCode}?status=published`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
-  return res.data.payload;
-};
-
 export const Entando6CorePageTemplateDataSource = async (pageTemplateCode: string) => {
   console.log('Fetching Entando6CorePageTemplate...');
   const token = await getServerKeycloakToken();
