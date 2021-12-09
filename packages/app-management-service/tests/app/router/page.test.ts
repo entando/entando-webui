@@ -207,5 +207,3 @@ describe('User can Publish and Unpublish a Page', () => {
     expect(fs.existsSync(filename)).toBeFalsy();
   });
 });
-
-
