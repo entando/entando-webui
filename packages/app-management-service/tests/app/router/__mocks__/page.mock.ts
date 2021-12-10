@@ -51,3 +51,12 @@ export const CREATE_VALIDATION_ERRORS = [
   'charset must be a string',
   'contentType must be a string'
 ];
+
+export const UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS = [
+  'status must be one of the following values: draft, published',
+];
+
+export const UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY = [
+  'status must be one of the following values: draft, published',
+  'status must be a string',
+];

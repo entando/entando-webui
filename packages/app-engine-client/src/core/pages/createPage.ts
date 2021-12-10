@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getServerKeycloakToken } from '../../keycloak/getServerKeycloakToken';
-import { ICreatePageRequest } from './request/ICreatePageRequest';
+import { ICreatePageRequest } from './requests';
 
 const createPage = async (request: ICreatePageRequest) => {
   const token = await getServerKeycloakToken();
