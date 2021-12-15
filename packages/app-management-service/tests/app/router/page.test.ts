@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import fs from 'fs';
 import app from '../../../src/server';
 import { createMockInstance, activateMock, MockInstance, Mock, MockUser } from 'keycloak-mock';
-import { CREATE_PAGE_REQUEST, CREATE_PAGE_RESPONSE, CREATE_VALIDATION_ERRORS, UPDATE_PAGE_REQUEST, UPDATE_PAGE_RESPONSE, UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY, UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS, UPDATE_VALIDATION_ERRORS } from './__mocks__/page.mock';
+import { CREATE_PAGE_REQUEST, CREATE_NX_PAGE_RESPONSE, CREATE_VALIDATION_ERRORS, UPDATE_PAGE_REQUEST, UPDATE_PAGE_RESPONSE, UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY, UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS, UPDATE_TO_LEGACY_PAGE_RESPONSE, UPDATE_TO_NX_PAGE_RESPONSE, UPDATE_VALIDATION_ERRORS, CREATE_LEGACY_PAGE_RESPONSE } from './__mocks__/page.mock';
 import { appManager } from '../../../src/manager/AppManager';
 import nock from 'nock';
 import { IUpdatePageStatusRequest } from '@entando-webui/app-engine-client/src/core/pages/requests';
@@ -54,7 +54,7 @@ describe('User can Create and Delete a Page', () => {
   test('tests create and delete a page successfully', async () => {
     nock(`${process.env.ENTANDO_CORE_API_URL}`)
       .post('/api/pages')
-      .reply(201, { payload: CREATE_PAGE_RESPONSE });
+      .reply(201, { payload: CREATE_NX_PAGE_RESPONSE });
 
     nock(`${process.env.ENTANDO_CORE_API_URL}`)
       .delete(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
@@ -66,7 +66,7 @@ describe('User can Create and Delete a Page', () => {
       .send(CREATE_PAGE_REQUEST)
       .expect(201);
       
-    expect(createResponse.body.payload).toMatchObject(CREATE_PAGE_RESPONSE);
+    expect(createResponse.body.payload).toMatchObject(CREATE_NX_PAGE_RESPONSE);
       
     const filename = `${appManager.pagesDevPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
     expect(fs.existsSync(filename)).toBeTruthy();
@@ -121,14 +121,14 @@ describe('User can Publish and Unpublish a Page', () => {
   test('tests publish and unpublish a page successfully', async () => {
     nock(`${process.env.ENTANDO_CORE_API_URL}`)
       .post('/api/pages')
-      .reply(201, { payload: CREATE_PAGE_RESPONSE });
+      .reply(201, { payload: CREATE_NX_PAGE_RESPONSE });
     
     nock(`${process.env.ENTANDO_CORE_API_URL}`)
       .persist()
       .put(`/api/pages/${CREATE_PAGE_REQUEST.code}/status`)
       .reply(201, (_uri: string, requestBody: IUpdatePageStatusRequest) => {
         return { payload: {
-          ...CREATE_PAGE_RESPONSE,
+          ...CREATE_NX_PAGE_RESPONSE,
           status: requestBody.status === 'draft'
             ? 'unpublished'
             : 'published'
@@ -141,7 +141,7 @@ describe('User can Publish and Unpublish a Page', () => {
       .send(CREATE_PAGE_REQUEST)
       .expect(201);
       
-    expect(createResponse.body.payload).toMatchObject(CREATE_PAGE_RESPONSE);
+    expect(createResponse.body.payload).toMatchObject(CREATE_NX_PAGE_RESPONSE);
       
     const draftFilename = `${appManager.pagesDevPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
     const publishFilename = `${appManager.pagesDevPath()}/${CREATE_PAGE_REQUEST.code}.published.page.tsx`;
@@ -213,11 +213,11 @@ describe('User can Edit a Page', () => {
   test('tests create and edit a page successfully', async () => {
     nock(`${process.env.ENTANDO_CORE_API_URL}`)
       .post('/api/pages')
-      .reply(201, { payload: CREATE_PAGE_RESPONSE });
+      .reply(201, { payload: CREATE_NX_PAGE_RESPONSE });
 
     nock(`${process.env.ENTANDO_CORE_API_URL}`)
       .get(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
-      .reply(201, { payload: CREATE_PAGE_RESPONSE });
+      .reply(201, { payload: CREATE_NX_PAGE_RESPONSE });
 
     nock(`${process.env.ENTANDO_CORE_API_URL}`)
       .put(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
@@ -229,7 +229,7 @@ describe('User can Edit a Page', () => {
       .send(CREATE_PAGE_REQUEST)
       .expect(201);
       
-    expect(createResponse.body.payload).toMatchObject(CREATE_PAGE_RESPONSE);
+    expect(createResponse.body.payload).toMatchObject(CREATE_NX_PAGE_RESPONSE);
       
     const filename = `${appManager.pagesDevPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
     expect(fs.existsSync(filename)).toBeTruthy();
@@ -242,6 +242,74 @@ describe('User can Edit a Page', () => {
       
     expect(updateResponse.body.payload).toMatchObject(UPDATE_PAGE_RESPONSE);
     expect(fs.existsSync(filename)).toBeTruthy();
+  });
+
+  test('tests converting a page from \'nx\' to \'legacy\' type', async () => {
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .post('/api/pages')
+      .reply(201, { payload: CREATE_NX_PAGE_RESPONSE });
+
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .get(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .reply(201, { payload: UPDATE_TO_NX_PAGE_RESPONSE });
+
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .put(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .reply(201, { payload: UPDATE_TO_LEGACY_PAGE_RESPONSE });
+
+    // Test Create Page
+    const createResponse = await supertest(app).post('/api/pages')
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send(CREATE_PAGE_REQUEST)
+      .expect(201);
+      
+    expect(createResponse.body.payload).toMatchObject(CREATE_NX_PAGE_RESPONSE);
+      
+    const filename = `${appManager.pagesDevPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeTruthy();
+
+    // Test Edit Page
+    const updateResponse = await supertest(app).put(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send(UPDATE_PAGE_REQUEST)
+      .expect(201);
+      
+    expect(updateResponse.body.payload).toMatchObject(UPDATE_TO_LEGACY_PAGE_RESPONSE);
+    expect(fs.existsSync(filename)).toBeFalsy(); // page was removed
+  });
+
+  test('tests converting a page from \'legacy\' to \'nx\' type', async () => {
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .post('/api/pages')
+      .reply(201, { payload: CREATE_LEGACY_PAGE_RESPONSE });
+
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .get(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .reply(201, { payload: CREATE_LEGACY_PAGE_RESPONSE });
+
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .put(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .reply(201, { payload: UPDATE_TO_NX_PAGE_RESPONSE });
+
+    // Test Create Legacy Page
+    const createResponse = await supertest(app).post('/api/pages')
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send(CREATE_PAGE_REQUEST)
+      .expect(201);
+      
+    expect(createResponse.body.payload).toMatchObject(CREATE_LEGACY_PAGE_RESPONSE);
+      
+    const filename = `${appManager.pagesDevPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeFalsy();
+
+    // Test Edit Page
+    const updateResponse = await supertest(app).put(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send(UPDATE_PAGE_REQUEST)
+      .expect(201);
+      
+    expect(updateResponse.body.payload).toMatchObject(UPDATE_TO_NX_PAGE_RESPONSE);
+    expect(fs.existsSync(filename)).toBeTruthy(); // page was created
   });
 
   test('tests edit a page without authorization token', async () => {

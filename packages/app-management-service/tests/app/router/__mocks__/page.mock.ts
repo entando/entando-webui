@@ -13,7 +13,7 @@ export const CREATE_PAGE_REQUEST = {
   contentType: 'text/html',
 };
 
-export const CREATE_PAGE_RESPONSE = {
+export const CREATE_NX_PAGE_RESPONSE = {
   code: 'new_page',
   status: 'unpublished',
   type: 'nx',
@@ -42,14 +42,29 @@ export const CREATE_PAGE_RESPONSE = {
   token: null
 };
 
+export const CREATE_LEGACY_PAGE_RESPONSE = {
+  ...CREATE_NX_PAGE_RESPONSE,
+  type: 'legacy',
+};
+
 export const UPDATE_PAGE_REQUEST = {
   ...CREATE_PAGE_REQUEST,
   parentCode: 'service',
 };
 
 export const UPDATE_PAGE_RESPONSE = {
-  ...CREATE_PAGE_RESPONSE,
+  ...CREATE_NX_PAGE_RESPONSE,
   parentCode: UPDATE_PAGE_REQUEST.parentCode,
+};
+
+export const UPDATE_TO_LEGACY_PAGE_RESPONSE = {
+  ...UPDATE_PAGE_RESPONSE,
+  type: 'legacy',
+};
+
+export const UPDATE_TO_NX_PAGE_RESPONSE = {
+  ...UPDATE_PAGE_RESPONSE,
+  type: 'nx',
 };
 
 export const CREATE_VALIDATION_ERRORS = [
