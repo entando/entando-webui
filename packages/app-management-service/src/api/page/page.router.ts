@@ -26,7 +26,9 @@ router.post('/pages',
       return next(handleError(e));
     }
 
-    appManager.createPage(req.body.code);
+    if (result.type === 'nx') {
+      appManager.createPage(req.body.code);
+    }
 
     res.status(201).send({
       payload: result,
