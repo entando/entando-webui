@@ -16,6 +16,7 @@ export const CREATE_PAGE_REQUEST = {
 export const CREATE_PAGE_RESPONSE = {
   code: 'new_page',
   status: 'unpublished',
+  type: 'nx',
   onlineInstance: false,
   displayedInMenu: true,
   pageModel: 'home',
@@ -41,7 +42,18 @@ export const CREATE_PAGE_RESPONSE = {
   token: null
 };
 
+export const UPDATE_PAGE_REQUEST = {
+  ...CREATE_PAGE_REQUEST,
+  parentCode: 'service',
+};
+
+export const UPDATE_PAGE_RESPONSE = {
+  ...CREATE_PAGE_RESPONSE,
+  parentCode: UPDATE_PAGE_REQUEST.parentCode,
+};
+
 export const CREATE_VALIDATION_ERRORS = [
+  'code must be a string',
   'titles should not be null or undefined',
   'parentCode must be a string',
   'ownerGroup must be a string',
@@ -51,6 +63,8 @@ export const CREATE_VALIDATION_ERRORS = [
   'charset must be a string',
   'contentType must be a string'
 ];
+
+export const UPDATE_VALIDATION_ERRORS = CREATE_VALIDATION_ERRORS;
 
 export const UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS = [
   'status must be one of the following values: draft, published',

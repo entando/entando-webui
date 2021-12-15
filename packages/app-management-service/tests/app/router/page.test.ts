@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import fs from 'fs';
 import app from '../../../src/server';
 import { createMockInstance, activateMock, MockInstance, Mock, MockUser } from 'keycloak-mock';
-import { CREATE_PAGE_REQUEST, CREATE_PAGE_RESPONSE, CREATE_VALIDATION_ERRORS, UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY, UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS } from './__mocks__/page.mock';
+import { CREATE_PAGE_REQUEST, CREATE_PAGE_RESPONSE, CREATE_VALIDATION_ERRORS, UPDATE_PAGE_REQUEST, UPDATE_PAGE_RESPONSE, UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY, UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS, UPDATE_VALIDATION_ERRORS } from './__mocks__/page.mock';
 import { appManager } from '../../../src/manager/AppManager';
 import nock from 'nock';
 import { IUpdatePageStatusRequest } from '@entando-webui/app-engine-client/src/core/pages/requests';
@@ -46,6 +46,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  nock.cleanAll();
   fs.rmdirSync(appManager.appPath(), { recursive: true });
 });
 
@@ -104,11 +105,11 @@ describe('User can Create and Delete a Page', () => {
   test('tests create a page with invalid request', async () => {
     const response = await supertest(app).post('/api/pages')
       .set({ 'Authorization': `Bearer ${global.token}` })
-      .send({ code: 'new_page' })
+      .send({ /* empty */})
       .expect(400);
 
     expect(response.body.message).toBe('Validation Error');
-    expect(response.body.errors).toHaveLength(8);
+    expect(response.body.errors).toHaveLength(9);
     expect(response.body.errors).toMatchObject(CREATE_VALIDATION_ERRORS);
 
     const filename = `${appManager.appPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
@@ -207,3 +208,65 @@ describe('User can Publish and Unpublish a Page', () => {
     expect(fs.existsSync(filename)).toBeFalsy();
   });
 });
+
+describe('User can Edit a Page', () => {
+  test('tests create and edit a page successfully', async () => {
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .post('/api/pages')
+      .reply(201, { payload: CREATE_PAGE_RESPONSE });
+
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .get(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .reply(201, { payload: CREATE_PAGE_RESPONSE });
+
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .put(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .reply(201, { payload: UPDATE_PAGE_RESPONSE });
+
+    // Test Create Page
+    const createResponse = await supertest(app).post('/api/pages')
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send(CREATE_PAGE_REQUEST)
+      .expect(201);
+      
+    expect(createResponse.body.payload).toMatchObject(CREATE_PAGE_RESPONSE);
+      
+    const filename = `${appManager.pagesDevPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeTruthy();
+
+    // Test Edit Page
+    const updateResponse = await supertest(app).put(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send(UPDATE_PAGE_REQUEST)
+      .expect(201);
+      
+    expect(updateResponse.body.payload).toMatchObject(UPDATE_PAGE_RESPONSE);
+    expect(fs.existsSync(filename)).toBeTruthy();
+  });
+
+  test('tests edit a page without authorization token', async () => {
+    const response = await supertest(app).put(`/api/pages/${CREATE_PAGE_REQUEST.code}`)
+      .send(UPDATE_PAGE_REQUEST)
+      .expect(403);
+
+    expect(response.body.message).toBe('Access Denied');
+
+    const filename = `${appManager.appPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeFalsy();
+  });
+
+  test('tests edit a page with invalid request', async () => {
+    const response = await supertest(app).post('/api/pages')
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send({ /* empty */})
+      .expect(400);
+
+    expect(response.body.message).toBe('Validation Error');
+    expect(response.body.errors).toHaveLength(9);
+    expect(response.body.errors).toMatchObject(UPDATE_VALIDATION_ERRORS);
+
+    const filename = `${appManager.appPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeFalsy();
+  });
+});
+
