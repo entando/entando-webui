@@ -14,3 +14,9 @@ export interface ICreatePageRequest {
 export interface IUpdatePageStatusRequest {
   status: string
 }
+
+export interface IClonePageRequest {
+  newPageCode: string
+  parentCode: string
+  titles: Map<string, string>
+}
