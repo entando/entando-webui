@@ -17,6 +17,7 @@ export abstract class BaseAppManager {
     if (!fs.existsSync(folderpath)) {
       fs.mkdirSync(folderpath, { recursive: true });
     }
+    // Silently replaces file if already existed
     fs.writeFileSync(filepath, data);
   }
 

@@ -2,12 +2,15 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { keycloak } from '../../middleware/keycloak';
 import { validate } from '../../middleware/validator';
 import { appManager } from '../../manager/AppManager';
+import getPage from '@entando-webui/app-engine-client/src/core/pages/getPage';
 import createPage from '@entando-webui/app-engine-client/src/core/pages/createPage';
 import deletePage from '@entando-webui/app-engine-client/src/core/pages/deletePage';
+import updatePage from '@entando-webui/app-engine-client/src/core/pages/updatePage';
 import updatePageStatus from '@entando-webui/app-engine-client/src/core/pages/updatePageStatus';
 import CreatePageRequest from './request/CreatePageRequest';
 import { InternalServerError, RestError } from '../../middleware/error';
 import UpdatePageStatusRequest from './request/UpdatePageStatusRequest';
+import UpdatePageRequest from './request/UpdatePageRequest';
 
 export const router: Router = Router();
 
@@ -23,7 +26,9 @@ router.post('/pages',
       return next(handleError(e));
     }
 
-    appManager.createPage(req.body.code);
+    if (result.type === 'nx') {
+      appManager.createPage(req.body.code);
+    }
 
     res.status(201).send({
       payload: result,
@@ -45,6 +50,34 @@ router.delete('/pages/:code',
     appManager.deletePage(req.params.code);
 
     res.status(200).send({
+      payload: result,
+    });
+  }
+);
+
+router.put('/pages/:code',
+  keycloak.protect(),
+  validate(UpdatePageRequest),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let result, page;
+    try {
+      page = await getPage(req.params.code);
+      result = await updatePage(req.body);
+    } catch (e) {
+      console.log('Error updating Entando Core Page');
+      return next(handleError(e));
+    }
+
+    // If type was changed...
+    if (page.type !== result.type) {
+      if (result.type === 'nx') {
+        appManager.createPage(req.params.code);
+      } else {
+        appManager.deletePage(req.params.code);
+      }
+    }
+
+    res.status(201).send({
       payload: result,
     });
   }
