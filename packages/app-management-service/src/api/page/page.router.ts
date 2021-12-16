@@ -88,6 +88,26 @@ router.put('/pages/:code',
   }
 );
 
+router.post('/pages/:code/clone',
+  keycloak.protect(),
+  validate(ClonePageRequest),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let result;
+    try {
+      result = await clonePage(req.params.code, req.body);
+    } catch (e) {
+      console.log('Error Cloning Entando Core Page');
+      return next(handleError(e));
+    }
+
+    appManager.clonePage(req.params.code, req.body.newPageCode);
+
+    res.status(201).send({
+      payload: result,
+    });
+  }
+);
+
 router.put('/pages/:code/status',
   keycloak.protect(),
   validate(UpdatePageStatusRequest),
