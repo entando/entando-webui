@@ -28,14 +28,6 @@ export abstract class BaseAppManager {
     }
   }
 
-  clonePage(code: string, newPageCode: string): void {
-    const draftFilepath = `${this.pagesDevPath()}/${code}.page.tsx`;
-    const clonedFilepath = `${this.pagesDevPath()}/${newPageCode}.page.tsx`;
-    if(fs.existsSync(draftFilepath)) {
-      fs.copyFileSync(draftFilepath, clonedFilepath);
-    } //else fails silently...
-  }
-
   updatePageStatus(code: string, status: 'draft' | 'published'): void {
     const draftFilepath = `${this.pagesDevPath()}/${code}.page.tsx`;
     const publishedFilepath = `${this.pagesDevPath()}/${code}.published.page.tsx`;
@@ -47,4 +39,5 @@ export abstract class BaseAppManager {
   }
   
   abstract createPage(code: string): void;
+  abstract clonePage(code: string, newPageCode: string): void;
 }

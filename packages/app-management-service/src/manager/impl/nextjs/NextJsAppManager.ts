@@ -14,4 +14,17 @@ export class NextJsAppManager extends BaseAppManager {
     
     this.savePageFile(code, template(data));
   }
+
+  clonePage(code: string, newPageCode: string): void {
+    const draftFilepath = `${this.pagesDevPath()}/${code}.page.tsx`;
+    const clonedFilepath = `${this.pagesDevPath()}/${newPageCode}.page.tsx`;
+    if(fs.existsSync(draftFilepath)) {
+      const contents = fs.readFileSync(draftFilepath, 'utf8');
+      const clonedContents = contents.replace(
+        /const pageCode = '[a-zA-Z_]+';/g,
+        `const pageCode = '${newPageCode}';`
+      );
+      fs.writeFileSync(clonedFilepath, clonedContents);
+    } //else fails silently...
+  }
 }
