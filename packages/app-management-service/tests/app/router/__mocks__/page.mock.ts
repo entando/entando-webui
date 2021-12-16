@@ -120,6 +120,7 @@ export const CREATE_VALIDATION_ERRORS = [
 export const UPDATE_VALIDATION_ERRORS = CREATE_VALIDATION_ERRORS;
 
 export const CLONE_VALIDATION_ERRORS = [
+  'newPageCode must be a string',
   'parentCode must be a string',
   'titles should not be null or undefined'
 ];

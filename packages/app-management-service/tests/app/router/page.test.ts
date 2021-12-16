@@ -402,7 +402,7 @@ describe('User can Clone a Page', () => {
   test('tests clone a page with invalid request', async () => {
     const response = await supertest(app).post(`/api/pages/${CREATE_PAGE_REQUEST.code}/clone`)
       .set({ 'Authorization': `Bearer ${global.token}` })
-      .send({ newPageCode: 'cloned_page' })
+      .send({ /* empty body */ })
       .expect(400);
 
     expect(response.body.message).toBe('Validation Error');
