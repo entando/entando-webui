@@ -3,10 +3,26 @@ import { v4 as uuid } from 'uuid';
 import fs from 'fs';
 import app from '../../../src/server';
 import { createMockInstance, activateMock, MockInstance, Mock, MockUser } from 'keycloak-mock';
-import { CREATE_PAGE_REQUEST, CREATE_NX_PAGE_RESPONSE, CREATE_VALIDATION_ERRORS, UPDATE_PAGE_REQUEST, UPDATE_PAGE_RESPONSE, UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY, UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS, UPDATE_TO_LEGACY_PAGE_RESPONSE, UPDATE_TO_NX_PAGE_RESPONSE, UPDATE_VALIDATION_ERRORS, CREATE_LEGACY_PAGE_RESPONSE } from './__mocks__/page.mock';
 import { appManager } from '../../../src/manager/AppManager';
 import nock from 'nock';
 import { IUpdatePageStatusRequest } from '@entando-webui/app-engine-client/src/core/pages/requests';
+
+import {
+  CLONE_PAGE_REQUEST,
+  CLONE_PAGE_RESPONSE,
+  CREATE_PAGE_REQUEST,
+  CREATE_NX_PAGE_RESPONSE,
+  CREATE_VALIDATION_ERRORS,
+  UPDATE_PAGE_REQUEST,
+  UPDATE_PAGE_RESPONSE,
+  UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY,
+  UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS,
+  UPDATE_TO_LEGACY_PAGE_RESPONSE,
+  UPDATE_TO_NX_PAGE_RESPONSE,
+  UPDATE_VALIDATION_ERRORS,
+  CREATE_LEGACY_PAGE_RESPONSE,
+  CLONE_VALIDATION_ERRORS
+} from './__mocks__/page.mock';
 
 interface KeycloakTestCache {
   keycloak?: MockInstance
@@ -109,7 +125,7 @@ describe('User can Create and Delete a Page', () => {
       .expect(400);
 
     expect(response.body.message).toBe('Validation Error');
-    expect(response.body.errors).toHaveLength(9);
+    expect(response.body.errors).toHaveLength(CREATE_VALIDATION_ERRORS.length);
     expect(response.body.errors).toMatchObject(CREATE_VALIDATION_ERRORS);
 
     const filename = `${appManager.appPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
@@ -191,7 +207,7 @@ describe('User can Publish and Unpublish a Page', () => {
       .expect(400);
 
     expect(firstResponse.body.message).toBe('Validation Error');
-    expect(firstResponse.body.errors).toHaveLength(1);
+    expect(firstResponse.body.errors).toHaveLength(UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS.length);
     expect(firstResponse.body.errors).toMatchObject(UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS);
 
     expect(fs.existsSync(filename)).toBeFalsy();
@@ -202,7 +218,7 @@ describe('User can Publish and Unpublish a Page', () => {
       .expect(400);
 
     expect(secondResponse.body.message).toBe('Validation Error');
-    expect(secondResponse.body.errors).toHaveLength(2);
+    expect(secondResponse.body.errors).toHaveLength(UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY.length);
     expect(secondResponse.body.errors).toMatchObject(UPDATE_STATUS_VALIDATION_ERRORS_EMPTY_BODY);
 
     expect(fs.existsSync(filename)).toBeFalsy();
@@ -330,7 +346,7 @@ describe('User can Edit a Page', () => {
       .expect(400);
 
     expect(response.body.message).toBe('Validation Error');
-    expect(response.body.errors).toHaveLength(9);
+    expect(response.body.errors).toHaveLength(UPDATE_VALIDATION_ERRORS.length);
     expect(response.body.errors).toMatchObject(UPDATE_VALIDATION_ERRORS);
 
     const filename = `${appManager.appPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
@@ -338,3 +354,62 @@ describe('User can Edit a Page', () => {
   });
 });
 
+describe('User can Clone a Page', () => {
+  test('tests create and clone a page successfully', async () => {
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .post('/api/pages')
+      .reply(201, { payload: CREATE_NX_PAGE_RESPONSE });
+
+    nock(`${process.env.ENTANDO_CORE_API_URL}`)
+      .post(`/api/pages/${CREATE_PAGE_REQUEST.code}/clone`)
+      .reply(201, { payload: CLONE_PAGE_RESPONSE });
+
+    // Test Create Page
+    const createResponse = await supertest(app).post('/api/pages')
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send(CREATE_PAGE_REQUEST)
+      .expect(201);
+      
+    expect(createResponse.body.payload).toMatchObject(CREATE_NX_PAGE_RESPONSE);
+      
+    const filename = `${appManager.pagesDevPath()}/${CREATE_PAGE_REQUEST.code}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeTruthy();
+
+    // Test Clone Page
+    const cloneResponse = await supertest(app).post(`/api/pages/${CREATE_PAGE_REQUEST.code}/clone`)
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send(CLONE_PAGE_REQUEST)
+      .expect(201);
+      
+    expect(cloneResponse.body.payload).toMatchObject(CLONE_PAGE_RESPONSE);
+      
+    const cloneFilename = `${appManager.pagesDevPath()}/${CLONE_PAGE_REQUEST.newPageCode}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeTruthy(); // original exists
+    expect(fs.existsSync(cloneFilename)).toBeTruthy(); //cloned exists
+  });
+
+  test('tests clone a page without authorization token', async () => {
+    const response = await supertest(app).post(`/api/pages/${CREATE_PAGE_REQUEST.code}/clone`)
+      .send(CLONE_PAGE_REQUEST)
+      .expect(403);
+
+    expect(response.body.message).toBe('Access Denied');
+
+    const filename = `${appManager.appPath()}/${CLONE_PAGE_REQUEST.newPageCode}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeFalsy();
+  });
+
+  test('tests clone a page with invalid request', async () => {
+    const response = await supertest(app).post(`/api/pages/${CREATE_PAGE_REQUEST.code}/clone`)
+      .set({ 'Authorization': `Bearer ${global.token}` })
+      .send({ newPageCode: 'cloned_page' })
+      .expect(400);
+
+    expect(response.body.message).toBe('Validation Error');
+    expect(response.body.errors).toHaveLength(CLONE_VALIDATION_ERRORS.length);
+    expect(response.body.errors).toMatchObject(CLONE_VALIDATION_ERRORS);
+
+    const filename = `${appManager.appPath()}/${CLONE_PAGE_REQUEST.newPageCode}.page.tsx`;
+    expect(fs.existsSync(filename)).toBeFalsy();
+  });
+});
