@@ -24,6 +24,7 @@
         "linebreak-style": [ "error", "unix" ],
         "quotes": [ "error", "single" ],
         "semi": [ "error", "always" ],
-        "eol-last": 1
+        "eol-last": 1,
+        "max-len": ["warn", { "code": 120, "ignoreComments": true }]
     }
 }
