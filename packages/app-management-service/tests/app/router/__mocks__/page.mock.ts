@@ -67,6 +67,44 @@ export const UPDATE_TO_NX_PAGE_RESPONSE = {
   type: 'nx',
 };
 
+export const CLONE_PAGE_REQUEST = {
+  newPageCode: 'cloned_page',
+  titles: {
+    'en': 'Cloned Page',
+    'it': 'Pagina Clonata'
+  },
+  parentCode: 'new_page'
+};
+
+export const CLONE_PAGE_RESPONSE = {
+  code: 'cloned_page',
+  status: 'unpublished',
+  type: 'nx',
+  onlineInstance: false,
+  displayedInMenu: true,
+  pageModel: 'home',
+  charset: 'utf-8',
+  contentType: 'text/html',
+  parentCode: 'new_page',
+  seo: false,
+  titles: {
+    'en': 'Cloned Page',
+    'it': 'Pagina Clonata'
+  },
+  fullTitles: {
+    en: 'Home / Cloned Page',
+    it: 'Home / Pagina Clonata'
+  },
+  ownerGroup: 'administrators',
+  joinGroups: [],
+  children: [],
+  position: 8,
+  numWidget: 0,
+  lastModified: '2021-12-08 14:12:35',
+  fullPath: 'homepage/new_page/cloned_page',
+  token: null
+};
+
 export const CREATE_VALIDATION_ERRORS = [
   'code must be a string',
   'titles should not be null or undefined',
@@ -80,6 +118,12 @@ export const CREATE_VALIDATION_ERRORS = [
 ];
 
 export const UPDATE_VALIDATION_ERRORS = CREATE_VALIDATION_ERRORS;
+
+export const CLONE_VALIDATION_ERRORS = [
+  'newPageCode must be a string',
+  'parentCode must be a string',
+  'titles should not be null or undefined'
+];
 
 export const UPDATE_STATUS_VALIDATION_ERRORS_INVALID_STATUS = [
   'status must be one of the following values: draft, published',

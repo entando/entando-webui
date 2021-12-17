@@ -6,6 +6,7 @@ export interface AppManager {
   savePageFile(code: string, data: string): void;
   createPage(code: string): void;
   deletePage(code: string): void;
+  clonePage(code: string, newPageCode: string): void;
   updatePageStatus(code: string, status: 'draft' | 'published'): void;
 }
 

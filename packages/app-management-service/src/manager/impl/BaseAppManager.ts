@@ -39,4 +39,5 @@ export abstract class BaseAppManager {
   }
   
   abstract createPage(code: string): void;
+  abstract clonePage(code: string, newPageCode: string): void;
 }

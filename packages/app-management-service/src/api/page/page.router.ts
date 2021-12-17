@@ -2,15 +2,20 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { keycloak } from '../../middleware/keycloak';
 import { validate } from '../../middleware/validator';
 import { appManager } from '../../manager/AppManager';
-import getPage from '@entando-webui/app-engine-client/src/core/pages/getPage';
-import createPage from '@entando-webui/app-engine-client/src/core/pages/createPage';
-import deletePage from '@entando-webui/app-engine-client/src/core/pages/deletePage';
-import updatePage from '@entando-webui/app-engine-client/src/core/pages/updatePage';
-import updatePageStatus from '@entando-webui/app-engine-client/src/core/pages/updatePageStatus';
 import CreatePageRequest from './request/CreatePageRequest';
 import { InternalServerError, RestError } from '../../middleware/error';
 import UpdatePageStatusRequest from './request/UpdatePageStatusRequest';
 import UpdatePageRequest from './request/UpdatePageRequest';
+
+import {
+  getPage,
+  createPage,
+  deletePage,
+  updatePage,
+  updatePageStatus,
+  clonePage
+} from '@entando-webui/app-engine-client/src/core/pages';
+import ClonePageRequest from './request/ClonePageRequest';
 
 export const router: Router = Router();
 
@@ -76,6 +81,26 @@ router.put('/pages/:code',
         appManager.deletePage(req.params.code);
       }
     }
+
+    res.status(201).send({
+      payload: result,
+    });
+  }
+);
+
+router.post('/pages/:code/clone',
+  keycloak.protect(),
+  validate(ClonePageRequest),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let result;
+    try {
+      result = await clonePage(req.params.code, req.body);
+    } catch (e) {
+      console.log('Error Cloning Entando Core Page');
+      return next(handleError(e));
+    }
+
+    appManager.clonePage(req.params.code, req.body.newPageCode);
 
     res.status(201).send({
       payload: result,
