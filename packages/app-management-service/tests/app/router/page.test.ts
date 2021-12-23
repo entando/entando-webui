@@ -59,6 +59,7 @@ afterAll(() => {
 
 beforeEach(() => {
   process.env.MANAGED_APP_PATH = `/tmp/quickstart-nextjs-starter/${uuid()}`;
+  fs.mkdirSync(process.env.MANAGED_APP_PATH, { recursive: true });
 });
 
 afterEach(() => {
