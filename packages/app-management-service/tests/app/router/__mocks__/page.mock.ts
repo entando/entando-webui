@@ -16,7 +16,7 @@ export const CREATE_PAGE_REQUEST = {
 export const CREATE_NX_PAGE_RESPONSE = {
   code: 'new_page',
   status: 'unpublished',
-  type: 'nx',
+  type: 'NX',
   onlineInstance: false,
   displayedInMenu: true,
   pageModel: 'home',
@@ -44,7 +44,7 @@ export const CREATE_NX_PAGE_RESPONSE = {
 
 export const CREATE_LEGACY_PAGE_RESPONSE = {
   ...CREATE_NX_PAGE_RESPONSE,
-  type: 'legacy',
+  type: 'NT',
 };
 
 export const UPDATE_PAGE_REQUEST = {
@@ -59,12 +59,12 @@ export const UPDATE_PAGE_RESPONSE = {
 
 export const UPDATE_TO_LEGACY_PAGE_RESPONSE = {
   ...UPDATE_PAGE_RESPONSE,
-  type: 'legacy',
+  type: 'NT',
 };
 
 export const UPDATE_TO_NX_PAGE_RESPONSE = {
   ...UPDATE_PAGE_RESPONSE,
-  type: 'nx',
+  type: 'NX',
 };
 
 export const CLONE_PAGE_REQUEST = {
@@ -79,7 +79,7 @@ export const CLONE_PAGE_REQUEST = {
 export const CLONE_PAGE_RESPONSE = {
   code: 'cloned_page',
   status: 'unpublished',
-  type: 'nx',
+  type: 'NX',
   onlineInstance: false,
   displayedInMenu: true,
   pageModel: 'home',

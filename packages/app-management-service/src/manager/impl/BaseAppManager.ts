@@ -22,9 +22,17 @@ export abstract class BaseAppManager {
   }
 
   deletePage(code: string): void {
-    const filepath = `${this.pagesDevPath()}/${code}.page.tsx`;
-    if(fs.existsSync(filepath)) {
-      fs.unlinkSync(filepath);
+    const draftFilepath = `${this.pagesDevPath()}/${code}.page.tsx`;
+    const publishedFilepath = `${this.pagesDevPath()}/${code}.published.page.tsx`;
+    
+    // Delete draft version
+    if(fs.existsSync(draftFilepath)) {
+      fs.unlinkSync(draftFilepath);
+    }
+
+    // Delete published version
+    if(fs.existsSync(publishedFilepath)) {
+      fs.unlinkSync(publishedFilepath);
     }
   }
 

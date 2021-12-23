@@ -31,7 +31,7 @@ router.post('/pages',
       return next(handleError(e));
     }
 
-    if (result.type === 'nx') {
+    if (result.type === 'NX') {
       appManager.createPage(req.body.code);
     }
 
@@ -75,7 +75,7 @@ router.put('/pages/:code',
 
     // If type was changed...
     if (page.type !== result.type) {
-      if (result.type === 'nx') {
+      if (result.type === 'NX') {
         appManager.createPage(req.params.code);
       } else {
         appManager.deletePage(req.params.code);
@@ -100,7 +100,9 @@ router.post('/pages/:code/clone',
       return next(handleError(e));
     }
 
-    appManager.clonePage(req.params.code, req.body.newPageCode);
+    if (result.type === 'NX') {
+      appManager.clonePage(req.params.code, req.body.newPageCode);
+    }
 
     res.status(201).send({
       payload: result,
@@ -120,7 +122,9 @@ router.put('/pages/:code/status',
       return next(handleError(e));
     }
 
-    appManager.updatePageStatus(req.params.code, req.body.status);
+    if (result.type === 'NX') {
+      appManager.updatePageStatus(req.params.code, req.body.status);
+    }
 
     res.status(201).send({
       payload: result,
