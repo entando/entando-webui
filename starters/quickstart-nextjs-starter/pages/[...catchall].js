@@ -42,19 +42,20 @@ export async function getServerSideProps({ req, res }) {
 
   // Request rendered page from legacy system.
   // In this case it's PortalUI, but technically can be any system
+  const username = session ? session.user.name : '';
   const { html, statusCode, headers } = await Entando6PortalUIUrlDataSource(
-    req.method,
     `${serverRuntimeConfig.PORTALUI_ADDR}${req.url}`,
-    req.headers
+    req.headers,
+    username,
   );
 
-  /** 
+  /**
    * TODO: Here we can load some service configuration, for instance new Entando Core Micro Service,
    * and inject MFEs in loaded HTML according to a specific configuration or business logic
-   * 
+   *
    * This technique allows to gradually migrate a Monolith into Entando and have full control
    * of the resulted proxyed html.
-   * 
+   *
    * Here we show an example loading pages from PortalUI, but technically can be any Legacy System
    **/
 
