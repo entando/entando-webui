@@ -3,7 +3,6 @@ import path from 'path';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const Entando6PortalUIUrlDataSource = async (url: string, headers: Record<string,string>, username: string) => {
-  //TODO: Should handle all 400 and 500 errors
   const parsed = path.parse(url);
   const pageCode = parsed.name;
   const dirArray = parsed.dir.split('/');
