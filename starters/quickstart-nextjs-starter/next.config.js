@@ -6,6 +6,7 @@ module.exports = {
   },
   experimental: {
     externalDir: true,
+    esmExternals: 'loose',
   },
   serverRuntimeConfig: {
     PORTALUI_ADDR: process.env.PORTALUI_ADDR || 'http://localhost:8088',
