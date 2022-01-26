@@ -12,7 +12,6 @@ export const Entando6PortalUIUrlDataSource = async (url: string, headers: Record
   const res = await axios.post(`${newDir}/webui`, {
     pageCode,
     langCode,
-    username,
   }, {headers});
 
   return {
