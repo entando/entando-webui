@@ -8,10 +8,10 @@ export const Entando6PortalUIUrlDataSource = async (url: string, headers: Record
   const dirArray = parsed.dir.split('/');
   const langCode = dirArray.pop();
   const newDir = dirArray.join('/');
+  headers['X-Forwarded-User'] = username;
   const res = await axios.post(`${newDir}/webui`, {
     pageCode,
     langCode,
-    username,
   }, {headers});
 
   return {
