@@ -4,7 +4,8 @@
     "workspaces": {
         "packages": [
             "packages/*",
-            "starters/*"
+            "starters/*",
+            "services/*"
         ],
         "nohoist": [ "**/*" ]
     },
