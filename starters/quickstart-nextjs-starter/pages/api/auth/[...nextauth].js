@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import KeycloakProvider from 'next-auth/providers/keycloak';
 
-import { Entando6UserAuthoritiesDataSource, refreshClientToken } from '@entando-webui/app-engine-client';
+import { getUserAuthorities, refreshClientToken } from '@entando-webui/app-engine-client';
 
 export default NextAuth({
   providers: [
@@ -30,7 +30,7 @@ export default NextAuth({
       // Initial sign in
       if (user && profile) {
         console.log('NextAuth: Injecting Entando Core Permissions into JWT Session: ', username);
-        const permissions = await Entando6UserAuthoritiesDataSource(username);
+        const permissions = await getUserAuthorities(username);
 
         return {
           accessToken: account.access_token,
@@ -47,7 +47,7 @@ export default NextAuth({
 
       // Access token has expired, try to update it
       const refreshedToken =  await refreshClientToken(token.refreshToken);
-      const permissions = await Entando6UserAuthoritiesDataSource(username);
+      const permissions = await getUserAuthorities(username);
 
       return {
         accessToken: refreshedToken.access_token,

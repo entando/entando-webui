@@ -1,11 +1,13 @@
 {
     "private": true,
     "name": "entando-webui",
-    "workspaces": [
-        "packages/app-engine-client",
-        "packages/app-management-service",
-        "starters/quickstart-nextjs-starter"
-    ],
+    "workspaces": {
+        "packages": [
+            "packages/*",
+            "starters/*"
+        ],
+        "nohoist": [ "**/*" ]
+    },
     "license": "GPL-3.0",
     "scripts": {
         "app-engine-client": "yarn workspace @entando-webui/app-engine-client dev",

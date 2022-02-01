@@ -1,4 +1,4 @@
-export default function handleErrorAndRedirectToErrorPage(statusCode: number) {
+export function handleErrorAndRedirectToErrorPage(statusCode: number) {
   //TODO should this be improved to use a single error page
   let page;
   if (statusCode === 404) {

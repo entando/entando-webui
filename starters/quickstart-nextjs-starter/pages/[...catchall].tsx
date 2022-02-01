@@ -1,12 +1,11 @@
 import { getSession } from 'next-auth/react';
 import getConfig from 'next/config';
-import React from 'react';
-import Head from 'next/head';
-import path from 'path';
 
-import { getPage } from '@entando-webui/app-engine-client/src/core/pages/getPage';
-import { Entando6PortalUIUrlDataSource } from '@entando-webui/app-engine-client';
-import handleErrorAndRedirectToErrorPage from 'utils/handleErrorAndRedirectToErrorPage';
+import { getPage, renderPortalUIPage } from '@entando-webui/app-engine-client';
+import {
+  handleErrorAndRedirectToErrorPage,
+  extractEntandoParamsFromUrl
+} from 'utils';
 
 /**
  * This Catch All Rule proxies requests to Portal UI
@@ -14,44 +13,41 @@ import handleErrorAndRedirectToErrorPage from 'utils/handleErrorAndRedirectToErr
  * into a modern MFE Entando Architecture using the WebUI
  * project and minimizes impact during refactoring stages
  **/
-export default class EntandoPage extends React.Component {
-  render() {
-    return (
-      <Head>
-        <link rel="entando" href="/favicon.ico"/>
-      </Head>
-    );
-  }
-}
+const LegacyPage = () => {
+  return null;
+};
+
+export default LegacyPage;
 
 export async function getServerSideProps({ req, res }) {
   let html, statusCode, headers;
   try {
     const { serverRuntimeConfig } = getConfig();
-    const pageCode = path.parse(req.url).base.replace('.page', '');
-    const pageData = await getPage(pageCode);
+    const {
+      PORTALUI_ADDR: url,
+      NEXTAUTH_URL: loginUrl,
+    } = serverRuntimeConfig;
+
+    const { code, language } = extractEntandoParamsFromUrl(req.url);
+    const pageData = await getPage(code);
     const isPrivatePage = pageData && pageData.ownerGroup !== 'free';
     const session = await getSession({ req });
+    const username = session?.user?.name;
 
     if (isPrivatePage && (!session || !session.user)) {
       //Redirect to NextAuth.js authorization url
       return {
         redirect: {
-          destination: `${process.env.NEXTAUTH_URL}/api/auth/signin?callbackUrl=${process.env.NEXTAUTH_URL}${req.url}`,
+          destination: `${loginUrl}/api/auth/signin?callbackUrl=${req.url}`,
         },
       };
     }
 
     // Request rendered page from legacy system.
     // In this case it's PortalUI, but technically can be any system
-    const username = session ? session.user.name : '';
-
-    ({ html, statusCode, headers } = await Entando6PortalUIUrlDataSource(
-      `${serverRuntimeConfig.PORTALUI_ADDR}${req.url}`,
-      req.headers,
-      username,
-    ));
+    ({ html, statusCode, headers } = await renderPortalUIPage(url, code, language, username));
   } catch (error) {
+    console.log('Handling PortalUI Error: ', error);
     return handleErrorAndRedirectToErrorPage(error.response.status);
   }
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Layout } from 'components/Layout';
 
-import { useEntandoPermissions } from 'hooks/useEntandoPermissions';
+import { ISession, useEntandoPermissions } from '@entando-webui/ootb-components/src/hooks/useEntandoPermissions';
 import { useSession } from 'next-auth/react';
-import { Entando6CoreLanguagesDataSource } from '@entando-webui/app-engine-client';
+import { getLanguages, IPage } from '@entando-webui/app-engine-client';
 import { getPage } from '@entando-webui/app-engine-client/src/core/pages/getPage';
 
 /**
@@ -20,18 +20,12 @@ import { getPage } from '@entando-webui/app-engine-client/src/core/pages/getPage
  *
  **/
 
-interface IPage {
-  title: string
-  group: string
-  secondaryGroups: Array<string>
-}
-
  interface Props {
   page: IPage
 }
 
 const ServicePage = ({ page }: Props) => {
-  const { data: session } = useSession();
+  const session: ISession = useSession().data as unknown as ISession; //TODO revisit this unecessary cast
   const hasPermission = useEntandoPermissions(page.group, page.secondaryGroups, session);
   
   return (
@@ -71,7 +65,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const langs = await Entando6CoreLanguagesDataSource();
+  const langs = await getLanguages();
   const paths = langs
     .filter(lang => lang.isActive === true)
     .map(lang => {
