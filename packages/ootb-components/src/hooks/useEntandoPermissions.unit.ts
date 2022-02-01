@@ -4,7 +4,7 @@ describe('invalid or empty session', () => {
   test('no session', () => {
     //Given
     const primaryGroup = 'administrators';
-    const secondaryGroups = [];
+    const secondaryGroups: Array<string> = [];
     const session = undefined;
   
     //When
@@ -17,68 +17,8 @@ describe('invalid or empty session', () => {
   test('no session but group is \'free\'', () => {
     //Given
     const primaryGroup = 'free';
-    const secondaryGroups = [];
+    const secondaryGroups: Array<string> = [];
     const session = undefined;
-  
-    //When
-    const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
-  
-    //Then
-    expect(isAuthorized).toBeTruthy();
-  });
-
-  test('empty session', () => {
-    //Given
-    const primaryGroup = 'administrators';
-    const secondaryGroups = [];
-    const session = {};
-  
-    //When
-    const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
-  
-    //Then
-    expect(isAuthorized).toBeFalsy();
-  });
-
-  test('empty session but group is \'free\'', () => {
-    //Given
-    const primaryGroup = 'free';
-    const secondaryGroups = [];
-    const session = {};
-  
-    //When
-    const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
-  
-    //Then
-    expect(isAuthorized).toBeTruthy();
-  });
-  
-  test('undefined permissions', () => {
-    //Given
-    const primaryGroup = 'administrators';
-    const secondaryGroups = [];
-    const session = {
-      user: {
-        permissions: undefined
-      }
-    };
-  
-    //When
-    const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
-  
-    //Then
-    expect(isAuthorized).toBeFalsy();
-  });
-
-  test('undefined permissions but group is \'free\'', () => {
-    //Given
-    const primaryGroup = 'free';
-    const secondaryGroups = [];
-    const session = {
-      user: {
-        permissions: undefined
-      }
-    };
   
     //When
     const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
@@ -92,7 +32,7 @@ describe('authorizes guest user on \'free\' group', () => {
   test('guest user on \'free\' main group', () => {
     //Given
     const primaryGroup = 'free';
-    const secondaryGroups = [];
+    const secondaryGroups: Array<string> = [];
     const session = {
       user: {
         permissions: []
@@ -128,7 +68,7 @@ describe('authorizes user on given group', () => {
   test('user with correct permissions on main group', () => {
     //Given
     const primaryGroup = 'administrators';
-    const secondaryGroups = [];
+    const secondaryGroups: Array<string> = [];
     const session = {
       user: {
         permissions: [{ group: 'administrators', role: 'admin' }]
