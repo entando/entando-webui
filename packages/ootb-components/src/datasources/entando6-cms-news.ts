@@ -16,7 +16,7 @@ export const listNews = async (): Promise<Array<INews>> => {
   console.log('Fetching News...');
   const news = await getContents('NWS');
   return news.reverse().map((n: INews) => normalizeNews(`${process.env.ENTANDO_CORE_API_URL}`, n));
-}
+};
 
 // private utils
 // TODO should be using object-mapper lib

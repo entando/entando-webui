@@ -8,7 +8,7 @@ export interface ISession {
     name?: string | null;
     email?: string | null;
     image?: string | null;
-    permissions: Array<IPermission>
+    permissions?: Array<IPermission>
   }
 }
 

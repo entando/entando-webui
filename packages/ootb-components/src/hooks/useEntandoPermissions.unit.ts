@@ -1,4 +1,4 @@
-import { useEntandoPermissions } from './useEntandoPermissions';
+import { ISession, useEntandoPermissions } from './useEntandoPermissions';
 
 describe('invalid or empty session', () => {
   test('no session', () => {
@@ -26,6 +26,67 @@ describe('invalid or empty session', () => {
     //Then
     expect(isAuthorized).toBeTruthy();
   });
+});
+
+
+test('empty session', () => {
+  //Given
+  const primaryGroup = 'administrators';
+  const secondaryGroups: Array<string> = [];
+  const session = {};
+
+  //When
+  const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
+
+  //Then
+  expect(isAuthorized).toBeFalsy();
+});
+
+test('empty session but group is \'free\'', () => {
+  //Given
+  const primaryGroup = 'free';
+  const secondaryGroups: Array<string> = [];
+  const session = {};
+
+  //When
+  const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
+
+  //Then
+  expect(isAuthorized).toBeTruthy();
+});
+
+test('undefined permissions', () => {
+  //Given
+  const primaryGroup = 'administrators';
+  const secondaryGroups: Array<string> = [];
+  const session: ISession = {
+    user: {
+      permissions: undefined
+    }
+  };
+
+  //When
+  const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
+
+  //Then
+  expect(isAuthorized).toBeFalsy();
+});
+
+test('undefined permissions but group is \'free\'', () => {
+  //Given
+  const primaryGroup = 'free';
+  const secondaryGroups: Array<string> = [];
+  const session = {
+    user: {
+      permissions: undefined
+    }
+  };
+
+  //When
+  const isAuthorized = useEntandoPermissions(primaryGroup, secondaryGroups, session);
+
+  //Then
+  expect(isAuthorized).toBeTruthy();
 });
 
 describe('authorizes guest user on \'free\' group', () => {
