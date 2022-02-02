@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const renderPortalUIPage = async (url: string, pageCode: string, language: string, username?: string) => {
+export const renderPortalUIPage = async (url: string, pageCode: string, langCode: string, username?: string) => {
   const headers = username
     ? { 'X-FORWARDED-USER': username }
     : undefined;
@@ -9,7 +9,7 @@ export const renderPortalUIPage = async (url: string, pageCode: string, language
 
   const res = await axios.post(`${url}/webui`, {
     pageCode,
-    language,
+    langCode,
   }, { headers });
 
   return {
