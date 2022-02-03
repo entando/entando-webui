@@ -6,6 +6,7 @@ import CreatePageRequest from './request/CreatePageRequest';
 import { InternalServerError, RestError } from '../../middleware/error';
 import UpdatePageStatusRequest from './request/UpdatePageStatusRequest';
 import UpdatePageRequest from './request/UpdatePageRequest';
+import ClonePageRequest from './request/ClonePageRequest';
 
 import {
   getPage,
@@ -14,8 +15,7 @@ import {
   updatePage,
   updatePageStatus,
   clonePage
-} from '@entando-webui/app-engine-client/src/core/pages';
-import ClonePageRequest from './request/ClonePageRequest';
+} from '@entando-webui/app-engine-client';
 
 export const router: Router = Router();
 

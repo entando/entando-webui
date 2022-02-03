@@ -1,11 +1,13 @@
 import supertest from 'supertest';
 import { v4 as uuid } from 'uuid';
 import fs from 'fs';
-import app from '../../../src/server';
-import { createMockInstance, activateMock, MockInstance, Mock, MockUser } from 'keycloak-mock';
-import { appManager } from '../../../src/manager/AppManager';
 import nock from 'nock';
-import { IUpdatePageStatusRequest } from '@entando-webui/app-engine-client/src/core/pages/requests';
+import axios from 'axios';
+import { createMockInstance, activateMock, MockInstance, Mock, MockUser } from 'keycloak-mock';
+
+import app from '../../../src/server';
+import { appManager } from '../../../src/manager/AppManager';
+import { IUpdatePageStatusRequest } from '@entando-webui/app-engine-client';
 
 import {
   CLONE_PAGE_REQUEST,
@@ -64,7 +66,7 @@ beforeEach(() => {
 
 afterEach(() => {
   nock.cleanAll();
-  fs.rmdirSync(appManager.appPath(), { recursive: true });
+  fs.rmSync(appManager.appPath(), { recursive: true });
 });
 
 describe('User can Create and Delete a Page', () => {

@@ -10,5 +10,3 @@ export const deletePage = async (pageCode: string) => {
       
   return res.data.payload;
 };
-
-export default deletePage;
