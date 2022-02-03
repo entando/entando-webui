@@ -5,8 +5,19 @@ import cors from 'cors';
 import { keycloak } from './middleware/keycloak';
 import { loadRouters } from './utils/loadRouters';
 import errorHandler, { NotFoundError } from './middleware/error';
+import { TokenCache } from '@entando-webui/app-engine-client';
 
 const app: Express = express();
+
+/************************************************************************************
+ *                              Configure Global Cache
+ ***********************************************************************************/
+declare global {
+  // eslint-disable-next-line no-var
+  var __KEYCLOAK_TOKEN_CACHE__: TokenCache;
+}
+
+global.__KEYCLOAK_TOKEN_CACHE__ = new TokenCache();
 
 /************************************************************************************
  *                              Basic Express Middlewares

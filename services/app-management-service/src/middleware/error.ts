@@ -38,17 +38,13 @@ export class BadRequestError extends RestError {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  const error = err instanceof RestError
-    ? <RestError> err
-    : new InternalServerError(err.message);
-  
+// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars
+const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   return res
-    .status(error.status)
+    .status(err.status || 500)
     .json({
-      message: error.message,
-      errors: error.errors,
+      message: err.message || 'Internal Server Error',
+      errors: err.errors,
     });
 };
 
