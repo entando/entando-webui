@@ -1,10 +1,8 @@
 import React from 'react';
 import { Layout } from 'components/Layout';
-
-import { ISession, useEntandoPermissions } from '@entando-webui/ootb-components/src/hooks/useEntandoPermissions';
 import { useSession } from 'next-auth/react';
-import { getLanguages, IPage } from '@entando-webui/app-engine-client';
-import { getPage } from '@entando-webui/app-engine-client/src/core/pages/getPage';
+import { ISession, useEntandoPermissions } from '@entando-webui/ootb-components';
+import { getPage, getLanguages, IPage } from '@entando-webui/app-engine-client';
 
 /**
  * Example Route Override.

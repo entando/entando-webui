@@ -1,6 +1,6 @@
-import { SessionProvider } from 'next-auth/react';
-import type { AppInitialProps, AppProps } from 'next/app';
 import React from 'react';
+import type { AppInitialProps, AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
 import { TokenCache } from '@entando-webui/app-engine-client';
 
 declare global {

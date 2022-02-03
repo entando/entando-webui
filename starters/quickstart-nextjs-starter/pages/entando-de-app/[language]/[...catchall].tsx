@@ -1,11 +1,9 @@
 import { getSession } from 'next-auth/react';
-import getConfig from 'next/config';
-
 import { getPage, renderPortalUIPage } from '@entando-webui/app-engine-client';
 import {
   handleErrorAndRedirectToErrorPage,
   extractEntandoParamsFromUrl
-} from 'utils';
+} from '@entando-webui/ootb-components';
 
 /**
  * This Catch All Rule proxies requests to Portal UI
@@ -22,11 +20,6 @@ export default LegacyPage;
 export async function getServerSideProps({ req, res }) {
   let html, statusCode, headers;
   try {
-    const { serverRuntimeConfig } = getConfig();
-    const {
-      PORTALUI_ADDR: url,
-      NEXTAUTH_URL: loginUrl,
-    } = serverRuntimeConfig;
 
     const { code, language } = extractEntandoParamsFromUrl(req.url);
     const pageData = await getPage(code);
@@ -38,14 +31,15 @@ export async function getServerSideProps({ req, res }) {
       //Redirect to NextAuth.js authorization url
       return {
         redirect: {
-          destination: `${loginUrl}/api/auth/signin?callbackUrl=${req.url}`,
+          destination: `${process.env.NEXTAUTH_URL}/api/auth/signin?callbackUrl=${req.url}`,
         },
       };
     }
 
     // Request rendered page from legacy system.
     // In this case it's PortalUI, but technically can be any system
-    ({ html, statusCode, headers } = await renderPortalUIPage(url, code, language, username));
+    ({ html, statusCode, headers } =
+      await renderPortalUIPage(process.env.PORTALUI_ADDR, code, language, username));
   } catch (error) {
     console.log('Handling PortalUI Error: ', error);
     return handleErrorAndRedirectToErrorPage(error.response.status);
