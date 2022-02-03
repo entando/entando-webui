@@ -19,11 +19,24 @@ const rewriteToPortalUi = (pathname: string): NextResponse => {
   return NextResponse.rewrite(url);
 };
 
+const shouldRedirectToDefaultHomepage = (pathname: string): boolean => {
+  const defaultHomepage = process.env.DEFAULT_HOMEPAGE;
+  return pathname === '/' && defaultHomepage && defaultHomepage.length > 0;
+};
+
+const redirectToHomepage = (): NextResponse => {
+  return NextResponse.redirect(process.env.DEFAULT_HOMEPAGE);
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
   const { pathname } = req.nextUrl;
-  
+
   if (shouldRewriteToPortalUi(pathname)) {
     return rewriteToPortalUi(pathname);
+  }
+
+  if (shouldRedirectToDefaultHomepage(pathname)) {
+    return redirectToHomepage();
   }
 }
