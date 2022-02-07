@@ -14,11 +14,11 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "type-check": "tsc",
-    "docker:build": "docker build -f Dockerfile -t ffleandro/entando-webui-quickstart-nextjs-starter:latest .",
+    "docker:build": "docker build -f Dockerfile -t $(GITHUB_ORG)/entando-webui-quickstart-nextjs-starter:latest .",
     "docker:rm": "docker rm quickstart-nextjs-starter",
-    "docker:run": "docker run -it -p 5000:5000 --env-file .env.docker --name quickstart-nextjs-starter ffleandro/entando-webui-quickstart-nextjs-starter:latest",
+    "docker:run": "docker run -it -p 5000:5000 --env-file .env.docker --name quickstart-nextjs-starter $(GITHUB_ORG)/entando-webui-quickstart-nextjs-starter:latest",
     "docker:start": "docker start -i quickstart-nextjs-starter",
-    "docker:publish": "docker push ffleandro/entando-webui-quickstart-nextjs-starter:latest"
+    "docker:publish": "docker push $(GITHUB_ORG)/entando-webui-quickstart-nextjs-starter:latest"
   },
   "dependencies": {
     "@entando-webui/app-engine-client": "^1.0.0",

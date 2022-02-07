@@ -21,7 +21,8 @@ const rewriteToPortalUi = (pathname: string): NextResponse => {
 
 const shouldRedirectToDefaultHomepage = (pathname: string): boolean => {
   const defaultHomepage = process.env.DEFAULT_HOMEPAGE;
-  return pathname === '/' && defaultHomepage && defaultHomepage.length > 0;
+  return (pathname === '/' || pathname === '/entando-de-app')
+    && defaultHomepage && defaultHomepage.length > 0;
 };
 
 const redirectToHomepage = (): NextResponse => {
