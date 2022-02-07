@@ -11,5 +11,3 @@ export const updatePage = async (request: ICreatePageRequest) => {
       
   return res.data.payload;
 };
-
-export default updatePage;

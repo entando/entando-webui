@@ -45,7 +45,7 @@ We provide a simple way to bootstrap a Development Environment using `yarn dev` 
 ### Environment Variables
 
 Before starting configure the `.env` files inside the following sub projects:
- - [packages/app-management-service](https://github.com/entando/entando-webui/blob/master/packages/app-management-service)
+ - [services/app-management-service](https://github.com/entando/entando-webui/blob/master/services/app-management-service)
  - [starters/quickstart-nextjs-starter](https://github.com/entando/entando-webui/blob/master/starters/quickstart-nextjs-starter)
 
 ### Project Stucture
