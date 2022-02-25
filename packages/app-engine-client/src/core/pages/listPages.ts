@@ -10,5 +10,3 @@ export const listPages = async () => {
   
   return res.data.payload;
 };
-
-export default listPages;

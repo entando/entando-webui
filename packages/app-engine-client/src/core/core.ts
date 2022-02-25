@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getServerKeycloakToken } from '../keycloak/getServerKeycloakToken';
 
-export const Entando6CorePageTemplateDataSource = async (pageTemplateCode: string) => {
+export const getPageTemplate = async (pageTemplateCode: string) => {
   console.log('Fetching Entando6CorePageTemplate...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/pageModels/${pageTemplateCode}`, {
@@ -11,7 +11,7 @@ export const Entando6CorePageTemplateDataSource = async (pageTemplateCode: strin
   return res.data.payload;
 };
 
-export const Entando6CoreFragmentSource = async (fragmentCode: string) => {
+export const getFragment = async (fragmentCode: string) => {
   console.log('Fetching Entando6CoreFragment...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/fragments/${fragmentCode}`, {
@@ -21,7 +21,7 @@ export const Entando6CoreFragmentSource = async (fragmentCode: string) => {
   return res.data.payload;
 };
 
-export const Entando6CorePageConfigurationSource = async (pageCode: string) => {
+export const getPageConfiguration = async (pageCode: string) => {
   console.log('Fetching Entando6CorePageConfiguration...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/page/${pageCode}/widgets?status=published`, {
@@ -31,7 +31,7 @@ export const Entando6CorePageConfigurationSource = async (pageCode: string) => {
   return res.data.payload;
 };
 
-export const Entando6CorePageSettingsDataSource = async () => {
+export const getPageSettings = async () => {
   console.log('Fetching Entando6CorePageSettings...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/pageSettings`, {
@@ -41,7 +41,7 @@ export const Entando6CorePageSettingsDataSource = async () => {
   return res.data.payload;
 };
 
-export const Entando6UserAuthoritiesDataSource = async (username: string) => {
+export const getUserAuthorities = async (username: string) => {
   console.log('Fetching Entando6CoreUserAuthorities...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/users/${username}/authorities`, {
@@ -51,7 +51,7 @@ export const Entando6UserAuthoritiesDataSource = async (username: string) => {
   return res.data.payload;
 };
 
-export const Entando6CoreLanguagesDataSource = async () => {
+export const getLanguages = async () => {
   console.log('Fetching Entando6CoreLanguages...');
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/languages`, {

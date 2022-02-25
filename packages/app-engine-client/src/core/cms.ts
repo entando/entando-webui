@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getServerKeycloakToken } from '../keycloak/getServerKeycloakToken';
 
-export const Entando6CMSContentsDataSource = async (contentType: string) => {
+export const getContents = async (contentType: string) => {
   console.log(`Fetching Entando6CMSContents: ${contentType}`);
   const token = await getServerKeycloakToken();
   const res = await axios.get(
@@ -12,7 +12,7 @@ export const Entando6CMSContentsDataSource = async (contentType: string) => {
   return res.data.payload;
 };
 
-export const Entando6CMSContentDataSource = async (contentId: string) => {
+export const getContent = async (contentId: string) => {
   console.log(`Fetching Entando6CMSContent: ${contentId}`);
   const token = await getServerKeycloakToken();
   const res = await axios.get(`${process.env.ENTANDO_CORE_API_URL}/api/plugins/cms/contents/${contentId}`, {
