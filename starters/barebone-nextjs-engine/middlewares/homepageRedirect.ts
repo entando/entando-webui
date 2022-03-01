@@ -11,7 +11,7 @@ export const homepageRedirectMiddleware = (req: NextRequest): NextResponse | und
   if((pathname === '' || pathname === PORTALUI_BASEPATH || pathname === BASEPATH)
         && defaultHomepage && defaultHomepage.length > 0) {
     const url = req.nextUrl.clone();
-    url.pathname = `${BASEPATH}/${defaultHomepage}`;
+    url.pathname = `${BASEPATH}${defaultHomepage}`;
     return NextResponse.redirect(url);
   }
   

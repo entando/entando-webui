@@ -14,11 +14,11 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "type-check": "tsc",
-    "docker:build": "docker build -f Dockerfile -t $(GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest .",
+    "docker:build": "docker build -f Dockerfile -t $(echo $GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest .",
     "docker:rm": "docker rm barebone-nextjs-engine",
-    "docker:run": "docker run -it -p 5000:5000 --env-file .env.docker --name barebone-nextjs-engine $(GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest",
+    "docker:run": "docker run -it -p 5000:3000 --env-file .env.docker --name barebone-nextjs-engine $(echo $GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest",
     "docker:start": "docker start -i barebone-nextjs-engine",
-    "docker:publish": "docker push $(GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest"
+    "docker:publish": "docker push $(echo $GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest"
   },
   "dependencies": {
     "@entando-webui/app-engine-client": "^1.0.0",
