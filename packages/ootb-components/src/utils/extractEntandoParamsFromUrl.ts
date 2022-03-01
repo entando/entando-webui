@@ -14,7 +14,7 @@ export class NotFoundError extends Error {
   }
 }
 
-export function extractEntandoParamsFromUrl(url: string): PageParams {
+export const extractEntandoParamsFromUrl = (url: string): PageParams => {
   const parsed = path.parse(url);
 
   const PORTALUI_BASEPATH = new URL(`${process.env.PORTALUI_ADDR}`).pathname.replace(/\/$/, '');
@@ -36,5 +36,5 @@ export function extractEntandoParamsFromUrl(url: string): PageParams {
     code,
     language,
   };
-}
+};
   
