@@ -11,5 +11,3 @@ export const clonePage = async (code: string, request: IClonePageRequest) => {
       
   return res.data.payload;
 };
-
-export default clonePage;

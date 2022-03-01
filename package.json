@@ -1,17 +1,21 @@
 {
     "private": true,
     "name": "entando-webui",
-    "workspaces": [
-        "packages/app-engine-client",
-        "packages/app-management-service",
-        "starters/quickstart-nextjs-starter"
-    ],
+    "workspaces": {
+        "packages": [
+            "packages/*",
+            "starters/*",
+            "services/*"
+        ],
+        "nohoist": [ "**/*" ]
+    },
     "license": "GPL-3.0",
     "scripts": {
         "app-engine-client": "yarn workspace @entando-webui/app-engine-client dev",
+        "ootb-components": "yarn workspace @entando-webui/ootb-components dev",
         "app-management-service": "yarn workspace @entando-webui/app-management-service dev",
-        "quickstart-nextjs-starter": "yarn workspace @entando-webui/quickstart-nextjs-starter dev",
-        "dev": "concurrently -k -n quickstart-nextjs-starter,app-management-service,app-engine-client \"yarn quickstart-nextjs-starter\"  \"yarn app-management-service\" \"yarn app-engine-client\""
+        "barebone-nextjs-engine": "yarn workspace @entando-webui/barebone-nextjs-engine dev",
+        "dev": "concurrently -k -n barebone-nextjs-engine,app-management-service,app-engine-client,ootb-components \"yarn barebone-nextjs-engine\"  \"yarn app-management-service\" \"yarn app-engine-client\" \"yarn ootb-components\""
     },
     "devDependencies": {
         "concurrently": "^6.4.0"

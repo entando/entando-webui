@@ -1,18 +1,16 @@
 import axios from 'axios';
-import path from 'path';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Entando6PortalUIUrlDataSource = async (url: string, headers: Record<string,string>, username: string) => {
-  const parsed = path.parse(url);
-  const pageCode = parsed.name;
-  const dirArray = parsed.dir.split('/');
-  const langCode = dirArray.pop();
-  const newDir = dirArray.join('/');
-  headers['X-Forwarded-User'] = username;
-  const res = await axios.post(`${newDir}/webui`, {
+export const renderPortalUIPage = async (url: string, pageCode: string, langCode: string, username?: string) => {
+  const headers = username
+    ? { 'X-FORWARDED-USER': username }
+    : undefined;
+
+  console.log('Fetching Rendered PortalUI Page: ', pageCode);
+
+  const res = await axios.post(`${url}/webui`, {
     pageCode,
     langCode,
-  }, {headers});
+  }, { headers });
 
   return {
     html: res.data,

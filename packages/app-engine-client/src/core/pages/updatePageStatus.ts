@@ -14,5 +14,3 @@ export const updatePageStatus = async (code: string, request: IUpdatePageStatusR
       
   return res.data.payload;
 };
-
-export default updatePageStatus;

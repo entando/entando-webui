@@ -8,15 +8,18 @@ import { ProductCard } from 'components/ProductCard';
 import styles from './index.module.css';
 
 import {
-  BannersDataSource,
-  CategoriesDataSource,
-  ProductsDataSource,
-} from 'datasources/ecommerce-entando6-cms';
+  getBanners,
+  getCategories,
+  getProducts,
+  IBanner,
+  ICategory,
+  IProduct,
+} from '@entando-webui/ootb-components';
 
 interface Props {
-  products: Array<any>
-  categories: Array<any>
-  banners: Array<any>
+  products: Array<IProduct>
+  categories: Array<ICategory>
+  banners: Array<IBanner>
 }
 
 const EcommerceExamplePage = ({ products, categories, banners }: Props) => {
@@ -35,7 +38,7 @@ const EcommerceExamplePage = ({ products, categories, banners }: Props) => {
           <h2 className={styles.title}>{'Daily Offers'}</h2>
           <div className={styles.productList}>
             {products.map((product) => (
-              <ProductCard key={product.id} {...product} />
+              <ProductCard key={product.code} {...product} />
             ))}
           </div>
         </main>
@@ -48,9 +51,9 @@ export async function getStaticProps() {
   console.log('EcommercePage: Calling getStaticProps');
 
   const datasources = [
-    ProductsDataSource,
-    CategoriesDataSource,
-    BannersDataSource,
+    getProducts,
+    getCategories,
+    getBanners,
   ];
 
   const results = await Promise.all(datasources.map(async (d) => d()));
