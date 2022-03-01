@@ -41,8 +41,9 @@ export async function getServerSideProps({ req, res }) {
     ({ html, statusCode, headers } =
       await renderPortalUIPage(process.env.PORTALUI_ADDR, code, language, username));
   } catch (error) {
-    console.log('Handling PortalUI Error: ', error);
-    return handleErrorAndRedirectToErrorPage(error.response.status);
+    console.log('Handling PortalUI Error: ', error.message);
+    const statusCode = error.status || error.response?.status || 500;
+    return handleErrorAndRedirectToErrorPage(statusCode);
   }
 
   /**
