@@ -14,11 +14,11 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "type-check": "tsc",
-    "docker:build": "docker build -f Dockerfile -t $(GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest .",
+    "docker:build": "docker build -f Dockerfile -t $(echo $GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest .",
     "docker:rm": "docker rm barebone-nextjs-engine",
-    "docker:run": "docker run -it -p 5000:5000 --env-file .env.docker --name barebone-nextjs-engine $(GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest",
+    "docker:run": "docker run -it -p 5000:3000 --env-file .env.docker --name barebone-nextjs-engine $(echo $GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest",
     "docker:start": "docker start -i barebone-nextjs-engine",
-    "docker:publish": "docker push $(GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest"
+    "docker:publish": "docker push $(echo $GITHUB_ORG)/entando-webui-barebone-nextjs-engine:latest"
   },
   "dependencies": {
     "@entando-webui/app-engine-client": "^1.0.0",
@@ -26,7 +26,7 @@
     "axios": "^0.21.1",
     "global": "^4.4.0",
     "jwt-decode": "^3.1.2",
-    "next": "^12.0.10",
+    "next": "^12.1.0",
     "next-auth": "4.0.0-beta.6",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

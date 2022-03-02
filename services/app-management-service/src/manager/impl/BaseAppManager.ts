@@ -7,7 +7,7 @@ export abstract class BaseAppManager {
   }
 
   pagesDevPath(): string {
-    return `${this.appPath()}/pages/entando-de-app/[language]`;
+    return `${this.appPath()}/pages/[language]`;
   }
 
   savePageFile(code: string, data: string): void {
