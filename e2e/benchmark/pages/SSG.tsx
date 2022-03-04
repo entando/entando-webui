@@ -1,5 +1,4 @@
 import React from 'react';
-import { Layout } from 'components/Layout';
 
 /**
  * Example Route Override.
@@ -26,25 +25,23 @@ interface Props {
 const ExamplePage = ({ products }: Props) => {
   
   return (
-    <Layout title="Test Page">
-      <>
-        <h1 className="my-5">Welcome to the Next Generation Entando Web Renderization Engine 👋</h1>
-        <div className="mb-5 lead text-muted">
-          <ul>
-            {
-              products.map(({name}) => <li key={name}>{name}</li>)
-            }
-          </ul>
-        </div>
-      </>
-    </Layout>
+    <>
+      <h1 className="my-5">Welcome to the Next Generation Entando Web Renderization Engine 👋</h1>
+      <div className="mb-5 lead text-muted">
+        <ul>
+          {
+            products.map(({name}) => <li key={name}>{name}</li>)
+          }
+        </ul>
+      </div>
+    </>
   );
 };
 
 export async function getStaticProps() {
   return {
     props: {
-      products: [{ name: 'Product'}],
+      products: [{ name: 'My Product Name'}],
     },
   };
 }
