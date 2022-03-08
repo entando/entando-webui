@@ -5,5 +5,6 @@ module.exports = {
   experimental: {
     externalDir: true,
     esmExternals: 'loose',
+    outputStandalone: true,
   },
 };

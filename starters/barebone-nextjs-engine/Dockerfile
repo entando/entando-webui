@@ -8,11 +8,9 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /app
 
-COPY package.json .
-COPY .next .next
-COPY next.config.js .
-COPY node_modules node_modules
+COPY .next/standalone .
+COPY .next/static .next/static
 COPY public public
 
-EXPOSE 5000
-ENTRYPOINT npm run start
+EXPOSE 3000
+ENTRYPOINT node server.js
