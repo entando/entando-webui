@@ -1,6 +1,16 @@
 import fs from 'fs';
+import simpleGit, { SimpleGit } from 'simple-git';
+
+// eslint-disable-next-line max-len
+const GIT_SSH_COMMAND = `ssh -i ${process.env.GIT_PVT_KEY_PATH} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no`;
 
 export abstract class BaseAppManager {
+  git: SimpleGit;
+
+  constructor() {
+    this.git = simpleGit(process.env.MANAGED_APP_PATH, { binary: 'git' })
+      .env('GIT_SSH_COMMAND', GIT_SSH_COMMAND);
+  }
 
   appPath(): string {
     return `${process.env.MANAGED_APP_PATH}`;
@@ -36,14 +46,23 @@ export abstract class BaseAppManager {
     }
   }
 
-  updatePageStatus(code: string, status: 'draft' | 'published'): void {
-    const draftFilepath = `${this.pagesDevPath()}/${code}.page.tsx`;
-    const publishedFilepath = `${this.pagesDevPath()}/${code}.published.page.tsx`;
-    if(fs.existsSync(draftFilepath) && status === 'published') {
-      fs.copyFileSync(draftFilepath, publishedFilepath);
-    } else if(fs.existsSync(publishedFilepath) && status === 'draft') {
-      fs.unlinkSync(publishedFilepath);
-    } //else fails silently...
+  async updatePageStatus(code: string, status: 'draft' | 'published'): Promise<void> {
+    const filepath = `${this.pagesDevPath()}/${code}.page.tsx`;
+    let message;
+
+    if (status === 'published') {
+      await this.git.add(filepath);
+      console.log('Creating page publish commit: ', filepath.replace(this.appPath(), ''));
+      message = `Publishing page: ${code}`;
+    } else {
+      await this.git.rmKeepLocal(filepath);
+      console.log('Creating page unpublish commit: ', filepath.replace(this.appPath(), ''));
+      message = `Unpublishing page: ${code}`;
+    }
+
+    await this.git.checkout('master');
+    await this.git.commit(message); //TODO: receive author as a parameter
+  }
   }
   
   abstract createPage(code: string): void;

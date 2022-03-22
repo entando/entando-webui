@@ -123,7 +123,7 @@ router.put('/pages/:code/status',
     }
 
     if (result.type === 'NX') {
-      appManager.updatePageStatus(req.params.code, req.body.status);
+      await appManager.updatePageStatus(req.params.code, req.body.status);
     }
 
     res.status(201).send({
