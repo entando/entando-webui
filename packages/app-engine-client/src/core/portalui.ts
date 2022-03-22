@@ -7,7 +7,7 @@ export const renderPortalUIPage = async (url: string, pageCode: string, langCode
 
   console.log('Fetching Rendered PortalUI Page: ', pageCode);
 
-  const res = await axios.post(`${url}/webui`, {
+  const res = await axios.post(`${url}/webui/`, {
     pageCode,
     langCode,
   }, { headers });
