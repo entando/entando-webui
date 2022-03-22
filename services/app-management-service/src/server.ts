@@ -44,9 +44,13 @@ app.use(keycloak.middleware());
 /************************************************************************************
  *                               Register all routes
  ***********************************************************************************/
+const basepath = process.env.API_BASEPATH
+  ? `${process.env.API_BASEPATH}`.replace(/\/$/, '')
+  : ''; // Default base path
+
 loadRouters(__dirname + '/api')
   .forEach(router => {
-    app.use('/api', router);
+    app.use(`${basepath}/api`, router);
   });
 
 // Fallback route
