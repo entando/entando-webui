@@ -5,7 +5,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "docker:build": "docker build -f Dockerfile -t ffleandro/entando-webui-ci-workspace-plugin:latest ../../",
-    "docker:run": "docker run -it --name entando-webui-ci-workspace-plugin -p 2222:22 -p 8080:80 -v $(pwd)/keys:/git-server/keys -v $(pwd)/repos:/git-server/repos ffleandro/entando-webui-ci-workspace-plugin:latest",
+    "docker:run": "docker run -it --name entando-webui-ci-workspace-plugin -p 2222:2222 -p 8080:80 -v $(pwd)/keys:/git-server/keys -v $(pwd)/../../../repos:/git-server/repos ffleandro/entando-webui-ci-workspace-plugin:latest",
     "docker:rm": "docker rm entando-webui-ci-workspace-plugin",
     "docker:start": "docker start -i entando-webui-ci-workspace-plugin",
     "docker:publish": "docker push ffleandro/entando-webui-ci-workspace-plugin:latest"

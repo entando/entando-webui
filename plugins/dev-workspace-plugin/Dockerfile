@@ -27,19 +27,11 @@ RUN nvm install 14 \
 #    && yarn config set enableTelemetry 0
 
 # Disable sudo
-RUN rm -f /etc/sudoers.d/openvscode-server
-
-# Configure vscode
-COPY plugins/dev-workspace-plugin/vscode/settings.json $HOME/.vscode/settings.json
-# COPY packages/dev-workspace-plugin/vscode/tasks.json $HOME/.vscode/tasks.json
-
-# Configure supervisor
-COPY plugins/dev-workspace-plugin/supervisord.conf /etc/supervisord.conf
-#RUN touch /var/log/supervisor/supervisord.log && chown -R openvscode-server:openvscode-server /var/log/supervisor
+# RUN rm -f /etc/sudoers.d/openvscode-server
 
 # Copy next.js starter app
-COPY starters/quickstart-nextjs-starter $HOME/app
-COPY starters/quickstart-nextjs-starter/.env.example $HOME/app/.env
+COPY starters/barebone-nextjs-engine $HOME/app
+# COPY starters/barebone-nextjs-engine/.env.example $HOME/app/.env
 
 # Copy Library Packages
 COPY packages/app-engine-client $HOME/packages/app-engine-client
@@ -50,37 +42,43 @@ COPY services/app-management-service $HOME/services/app-management-service
 COPY services/app-management-service/.env.example $HOME/services/app-management-service/.env
 
 RUN chown -R openvscode-server:openvscode-server $HOME
-
-WORKDIR $HOME
+RUN mkdir -p /var/log/supervisor && chown -R openvscode-server:openvscode-server /var/log/supervisor
+RUN mkdir -p /var/run/supervisor && chown -R openvscode-server:openvscode-server /var/run/supervisor
+RUN chmod -R 755 /usr/lib/python2.7
 
 USER openvscode-server
+WORKDIR $HOME
 
-# Initialize ssh
-# RUN mkdir $HOME/.ssh
-
-# RUN git init --shared=true
-
+# TODO: these packages should be published on npm
+# TODO: app-management-service should be running in 'prod' mode
 RUN cd packages/app-engine-client && \
-        npm install && \
+        npm i && \
         npm link && \
-        cd ../../ && \
-    cd packages/ootb-components && \
-        npm install && \
+        npm run build
+
+RUN cd packages/ootb-components && \
+        npm link @entando-webui/app-engine-client && \
+        npm i && \
         npm link && \
-        cd ../../ && \
-    cd app && \ 
+        npm run build
+
+RUN cd app && \ 
         npm link @entando-webui/app-engine-client && \
         npm link @entando-webui/ootb-components && \
-        npm install && \
-        cd .. && \
-    cd services/app-management-service && \
+        npm i
+
+RUN cd services/app-management-service && \
         npm link @entando-webui/app-engine-client && \
-        npm install && \
-        cd ../../
+        npm i
 
-# TODO: should we run supervisor without root?
-USER root
 
-EXPOSE 5000
+# Configure supervisor
+COPY plugins/dev-workspace-plugin/supervisord.conf /etc/supervisord.conf
 
+# Configure vscode
+COPY plugins/dev-workspace-plugin/vscode/settings.json $HOME/.vscode/settings.json
+# COPY packages/dev-workspace-plugin/vscode/tasks.json $HOME/.vscode/tasks.json
+
+
+EXPOSE 3000
 ENTRYPOINT /usr/bin/supervisord -c /etc/supervisord.conf
