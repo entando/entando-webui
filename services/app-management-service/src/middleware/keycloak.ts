@@ -1,5 +1,5 @@
 import KeycloakConnect, { KeycloakConfig, KeycloakOptions } from 'keycloak-connect';
-import { ForbiddenError } from './error';
+import { ForbiddenError } from '../error/errors';
 
 export default class Keycloak extends KeycloakConnect {
   constructor() {
