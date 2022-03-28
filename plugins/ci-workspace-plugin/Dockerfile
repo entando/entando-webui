@@ -8,7 +8,9 @@ RUN apk add --no-cache \
   git \
   bash \
   nodejs \
-  npm
+  npm \
+  yarn \
+  jq
 
 RUN chmod 775 /var/run
 RUN rm -f /var/run/nologin
@@ -30,7 +32,10 @@ RUN mkdir -p /git-server/keys /git-server/repos \
   && mkdir -p /home/git/.ssh \
   && touch /home/git/.ssh/authorized_keys \
   && chmod 600 /home/git/.ssh/authorized_keys \
-  && chown -R git:git /home/git
+  && chown -R git:git /home/git \
+  && mkdir -p /var/log/builds \
+  && chown -R git:git /var/log/builds
+
 
 COPY plugins/ci-workspace-plugin/sshd_config /etc/ssh/sshd_config
 COPY plugins/ci-workspace-plugin/start.sh start.sh
@@ -41,6 +46,8 @@ COPY plugins/ci-workspace-plugin/start.sh start.sh
 # named git-shell-commands in the user’s home directory.
 # More info: https://git-scm.com/docs/git-shell
 COPY plugins/ci-workspace-plugin/git-shell-commands /home/git/git-shell-commands
+COPY plugins/ci-workspace-plugin/hooks /home/git/hooks
+COPY plugins/ci-workspace-plugin/gitconfig /home/git/.gitconfig
 
 RUN chmod -R 775 /etc/ssh
 RUN chown root:git /etc/ssh #is this correct?

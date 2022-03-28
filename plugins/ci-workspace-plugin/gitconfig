@@ -1,0 +1,6 @@
+[core]
+    hooksPath = /home/git/hooks
+
+[user]
+    name = CI Workspace
+    email = developers@entando.com
