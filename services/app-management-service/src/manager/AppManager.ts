@@ -7,7 +7,8 @@ export interface AppManager {
   createPage(code: string): void;
   deletePage(code: string): void;
   clonePage(code: string, newPageCode: string): void;
-  updatePageStatus(code: string, status: 'draft' | 'published'): void;
+  updatePageStatus(code: string, status: 'draft' | 'published'): Promise<void>;
+  deployApp(name?: string, email?: string, tag?: string): Promise<string>
 }
 
 export class Factory {

@@ -3,10 +3,10 @@ import { keycloak } from '../../middleware/keycloak';
 import { validate } from '../../middleware/validator';
 import { appManager } from '../../manager/AppManager';
 import CreatePageRequest from './request/CreatePageRequest';
-import { InternalServerError, RestError } from '../../middleware/error';
 import UpdatePageStatusRequest from './request/UpdatePageStatusRequest';
 import UpdatePageRequest from './request/UpdatePageRequest';
 import ClonePageRequest from './request/ClonePageRequest';
+import { handleRestError } from '../../error/handleRestError';
 
 import {
   getPage,
@@ -28,7 +28,7 @@ router.post('/pages',
       result = await createPage(req.body);
     } catch (e) {
       console.log('Error creating Entando Core Page');
-      return next(handleError(e));
+      return next(handleRestError(e));
     }
 
     if (result.type === 'NX') {
@@ -49,7 +49,7 @@ router.delete('/pages/:code',
       result = await deletePage(req.params.code);
     } catch (e) {
       console.log('Error deleting Entando Core Page');
-      return next(handleError(e));
+      return next(handleRestError(e));
     }
 
     appManager.deletePage(req.params.code);
@@ -70,7 +70,7 @@ router.put('/pages/:code',
       result = await updatePage(req.body);
     } catch (e) {
       console.log('Error updating Entando Core Page');
-      return next(handleError(e));
+      return next(handleRestError(e));
     }
 
     // If type was changed...
@@ -97,7 +97,7 @@ router.post('/pages/:code/clone',
       result = await clonePage(req.params.code, req.body);
     } catch (e) {
       console.log('Error Cloning Entando Core Page');
-      return next(handleError(e));
+      return next(handleRestError(e));
     }
 
     if (result.type === 'NX') {
@@ -119,11 +119,11 @@ router.put('/pages/:code/status',
       result = await updatePageStatus(req.params.code, req.body);
     } catch (e) {
       console.log('Error updating Entando Core Page Status');
-      return next(handleError(e));
+      return next(handleRestError(e));
     }
 
     if (result.type === 'NX') {
-      appManager.updatePageStatus(req.params.code, req.body.status);
+      await appManager.updatePageStatus(req.params.code, req.body.status);
     }
 
     res.status(201).send({
@@ -131,10 +131,3 @@ router.put('/pages/:code/status',
     });
   }
 );
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const handleError = (e: any): RestError => {
-  return e.isAxiosError
-    ? new RestError(e.response.status, e.response.statusText, e.response.data.errors)
-    : new InternalServerError(e.message);
-};

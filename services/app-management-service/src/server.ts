@@ -4,8 +4,9 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { keycloak } from './middleware/keycloak';
 import { loadRouters } from './utils/loadRouters';
-import errorHandler, { NotFoundError } from './middleware/error';
+import errorHandler from './middleware/errorHandler';
 import { TokenCache } from '@entando-webui/app-engine-client';
+import { NotFoundError } from './error/errors';
 
 const app: Express = express();
 
