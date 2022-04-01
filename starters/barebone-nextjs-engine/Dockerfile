@@ -6,11 +6,35 @@ FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION}
 ARG NODE_ENV="production"
 ENV NODE_ENV=${NODE_ENV}
 
+RUN apk add --no-cache \
+  openssh \
+  git \
+  bash \
+  rsync \
+  supercronic \
+  jq
+
+RUN npm install pm2 -g
+
+RUN mkdir -p /home/node/.ssh
+# Copy temporary key for development purposes
+COPY plugins/ci-workspace-plugin/keys/id_rsa /home/node/.ssh/id_rsa
+
 WORKDIR /app
 
-COPY .next/standalone .
-COPY .next/static .next/static
-COPY public public
+COPY packages/nxupdater/updater.sh /home/node/updater.sh
+COPY packages/nxupdater/updater.crontab /home/node/updater.crontab
+
+COPY starters/barebone-nextjs-engine/start.sh start.sh
+
+COPY starters/barebone-nextjs-engine/.next/standalone .
+COPY starters/barebone-nextjs-engine/.next/static .next/static
+COPY starters/barebone-nextjs-engine/public public
+
+RUN chmod 400 /home/node/.ssh/id_rsa && \
+  chown -R node:node /home/node /app && \
+  chmod 777 /tmp && chmod -R 755 /app && \
+  mkdir /var/log/supercronic && chown -R node:node /var/log/supercronic
 
 EXPOSE 3000
-ENTRYPOINT node server.js
+ENTRYPOINT sh start.sh

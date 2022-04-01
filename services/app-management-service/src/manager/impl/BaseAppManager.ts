@@ -22,7 +22,7 @@ export abstract class BaseAppManager {
   git: SimpleGit;
 
   constructor() {
-    this.git = simpleGit(process.env.MANAGED_APP_PATH, { binary: 'git' })
+    this.git = simpleGit(process.env.MANAGED_APP_PATH, { binary: 'git', maxConcurrentProcesses: 1 })
       .env('GIT_SSH_COMMAND', GIT_SSH_COMMAND);
   }
 
@@ -76,6 +76,7 @@ export abstract class BaseAppManager {
 
     await this.git.checkout('master');
     await this.git.commit(message); //TODO: receive author as a parameter
+    await this.git.push(['origin', 'master']);
   }
 
   async deployApp(name: string, email: string, tag?: string): Promise<string> {
@@ -90,22 +91,24 @@ export abstract class BaseAppManager {
     
     await this.git.checkout('master');
     await this.git.add('.');
+    //TODO: git reset pages
     await this.git.commit('Publishing app', commitAuthor);
-    const hash = this.git.revparse('HEAD');
+    const hash = await this.git.revparse('HEAD');
     
+    await this.git.checkout(['-b', new_branch]);
+
     const deploymentStatusFilepath = `${this.appPath()}/deployment.status.json`;
     fs.writeFileSync(deploymentStatusFilepath, JSON.stringify({
       build_scheduled_time: new Date(),
+      build_started_time: null,
       build_finished_time: null,
-      deploy_scheduled_time: null,
       deploy_finished_time: null,
     }, null, 2));
-    
-    await this.git.checkout(['-b', new_branch]);
+
     await this.git.add(deploymentStatusFilepath);
     await this.git.commit('Triggering app deployment pipelines', commitAuthor);
     await this.git.addTag(new_tag);
-    await this.git.push(['origin', 'master', new_branch]);
+    await this.git.push(['--atomic', 'origin', 'master', new_branch, new_tag]);
     await this.git.checkout('master');
 
     return hash;

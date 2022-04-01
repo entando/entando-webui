@@ -15,8 +15,10 @@ export const portaluiRewriteMiddleware = (req: NextRequest): NextResponse | unde
   const { pathname } = req.nextUrl;
 
   if(PORTALUI_REWRITES.filter(p => pathname.includes(`${PORTALUI_BASEPATH}${p}`)).length != 0) {
+    const originalUrl = new URL(process.env.PORTALUI_ADDR);
     const url = req.nextUrl.clone();
-    url.host = new URL(process.env.PORTALUI_ADDR).host;
+    url.host = originalUrl.host;
+    url.port = originalUrl.port;
     url.pathname = pathname;
     return NextResponse.rewrite(url);
   }

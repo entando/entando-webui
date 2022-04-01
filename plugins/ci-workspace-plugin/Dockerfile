@@ -6,11 +6,12 @@ FROM alpine
 RUN apk add --no-cache \
   openssh \
   git \
+  rsync \
   bash \
   nodejs \
   npm \
-  yarn \
-  jq
+  jq \
+  supercronic
 
 RUN chmod 775 /var/run
 RUN rm -f /var/run/nologin
@@ -24,18 +25,21 @@ RUN rm -f /var/run/nologin
 # TODO: this should be done on start.sh otherwise every container instance will use the same host key
 RUN ssh-keygen -A
 
+COPY packages/nxupdater/finalizer.sh /home/git/finalizer.sh
+COPY packages/nxupdater/finalizer.crontab /home/git/finalizer.crontab
+
 # -D flag avoids password generation
 # -s flag changes user's shell
 RUN mkdir -p /git-server/keys /git-server/repos \
-  && adduser -D -s /usr/bin/git-shell git \
+  # && adduser -D -s /usr/bin/git-shell git \
+  && adduser -D git \
   && echo git:12345 | chpasswd \
   && mkdir -p /home/git/.ssh \
   && touch /home/git/.ssh/authorized_keys \
   && chmod 600 /home/git/.ssh/authorized_keys \
   && chown -R git:git /home/git \
-  && mkdir -p /var/log/builds \
-  && chown -R git:git /var/log/builds
-
+  && mkdir -p /var/log/builds && chown -R git:git /var/log/builds \
+  && mkdir -p /var/log/supercronic && chown -R git:git /var/log/supercronic
 
 COPY plugins/ci-workspace-plugin/sshd_config /etc/ssh/sshd_config
 COPY plugins/ci-workspace-plugin/start.sh start.sh

@@ -29,6 +29,12 @@ RUN nvm install 14 \
 # Disable sudo
 # RUN rm -f /etc/sudoers.d/openvscode-server
 
+# Copy temporary key for development purposes
+RUN mkdir -p /home/openvscode-server/.ssh
+COPY plugins/ci-workspace-plugin/keys/id_rsa /home/openvscode-server/.ssh/id_rsa
+RUN chown -R openvscode-server:openvscode-server /home/openvscode-server/.ssh
+RUN chmod 400 /home/openvscode-server/.ssh/id_rsa
+
 # Copy next.js starter app
 COPY starters/barebone-nextjs-engine $HOME/app
 # COPY starters/barebone-nextjs-engine/.env.example $HOME/app/.env
