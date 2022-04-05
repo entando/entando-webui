@@ -1,0 +1,12 @@
+#!/bin/bash
+
+while read oldrev newrev refname
+do
+  tag=${refname##*/}
+  if [[ "$tag" == BUILD_SCHEDULED_* ]] && [ "$newrev" != "0000000000000000000000000000000000000000" ]; then
+    suffix="${tag#"BUILD_SCHEDULED_"}"
+    branch="release_${suffix}"
+    timestamp="$(date +'%Y%m%d%H%M%S')"
+    /home/git/hooks/perform-build.sh "$tag" > /var/log/builds/"$branch"_"$timestamp".log 2>&1 &
+  fi
+done

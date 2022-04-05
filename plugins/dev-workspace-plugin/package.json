@@ -1,0 +1,13 @@
+{
+  "name": "@entando-webui/dev-workspace-plugin",
+  "version": "0.0.1",
+  "description": "Entando WebUI Development Workspace Plugin",
+  "license": "GPL-3.0",
+  "scripts": {
+    "docker:build": "docker build --progress=plain -f Dockerfile -t $(echo $GITHUB_ORG)/entando-webui-dev-workspace-plugin:latest ../../",
+    "docker:run": "docker run -it --init --name entando-webui-dev-workspace-plugin -p 3001:3000 -p 5000:5000 -p 8090:8080 -v $(pwd)/../ci-workspace-plugin/keys/id_rsa:/home/workspace/.ssh/id_rsa $(echo $GITHUB_ORG)/entando-webui-dev-workspace-plugin:latest",
+    "docker:rm": "docker rm entando-webui-dev-workspace-plugin",
+    "docker:start": "docker start -i entando-webui-dev-workspace-plugin",
+    "docker:publish": "docker push $(echo $GITHUB_ORG)/entando-webui-dev-workspace-plugin:latest"
+  }
+}
